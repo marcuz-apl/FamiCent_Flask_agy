@@ -1471,6 +1471,150 @@ tbody td {
   border-top: none !important;
 }
 
+/* =========================================================
+   Settings Page — Two-Column Card Grid
+   ========================================================= */
+.settings-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .settings-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   System Profile (sysinfo) Card
+   ========================================================= */
+.sysinfo-section {
+  padding: var(--space-4) 0;
+}
+
+.sysinfo-section-title {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--clr-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.sysinfo-divider {
+  height: 1px;
+  background: var(--clr-border);
+  margin: var(--space-2) 0;
+}
+
+.sysinfo-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+  min-height: 28px;
+}
+
+.sysinfo-label {
+  flex-shrink: 0;
+  width: 110px;
+  font-size: var(--font-size-sm);
+  color: var(--clr-text-secondary);
+}
+
+.sysinfo-value {
+  font-size: var(--font-size-sm);
+  color: var(--clr-text-primary);
+  flex: 1;
+  word-break: break-all;
+}
+
+.sysinfo-bar-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sysinfo-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--clr-bg-elevated);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.sysinfo-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--radius-pill);
+  transition: width 0.5s ease, background 0.4s ease;
+  background: var(--clr-success);
+}
+
+.sysinfo-bar-label {
+  flex-shrink: 0;
+  width: 42px;
+  text-align: right;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--clr-text-secondary);
+}
+
+.sysinfo-row-cores {
+  align-items: flex-start;
+}
+
+.sysinfo-cores-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: var(--space-2);
+}
+
+.sysinfo-core-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--clr-bg-elevated);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-2);
+}
+
+.sysinfo-core-label {
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--clr-text-muted);
+  flex-shrink: 0;
+  width: 18px;
+}
+
+.sysinfo-core-bar-track {
+  flex: 1;
+  height: 5px;
+  background: var(--clr-bg-primary);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.sysinfo-core-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.sysinfo-core-pct {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--clr-text-muted);
+  flex-shrink: 0;
+  width: 26px;
+  text-align: right;
+}
+
 /* Mobile Sidebar Toggle & Overlay */
 .header-sidebar-toggle {
   display: none;

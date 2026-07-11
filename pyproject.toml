@@ -11,6 +11,7 @@ dependencies = [
     "argon2-cffi",
     "pyotp",
     "qrcode[pil]",
+    "psutil>=5.9",
 ]
 requires-python = ">=3.11"
 

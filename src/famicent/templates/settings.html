@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<div style="max-width: 640px;">
+<div class="settings-cards-grid">
 
   {# ── Security Info ────────────────────────────────────────── #}
   <div class="card" id="security-card">
@@ -40,6 +40,186 @@
     </div>
   </div>
 
+  {# ── System Profile ───────────────────────────────────────── #}
+  <div class="card" id="sysinfo-card">
+    <div class="card-header">
+      <div class="card-title">🖥️ System Profile</div>
+      <span class="text-muted" id="sysinfo-updated" style="font-size: var(--font-size-xs);"></span>
+    </div>
+
+    {# CPU #}
+    <div class="sysinfo-section">
+      <div class="sysinfo-section-title">⚙️ CPU</div>
+      <div class="sysinfo-row">
+        <span class="sysinfo-label">Model</span>
+        <span class="sysinfo-value font-mono" id="cpu-name">—</span>
+      </div>
+      <div class="sysinfo-row">
+        <span class="sysinfo-label">Cores</span>
+        <span class="sysinfo-value" id="cpu-cores">—</span>
+      </div>
+      <div class="sysinfo-row">
+        <span class="sysinfo-label">Frequency</span>
+        <span class="sysinfo-value font-mono" id="cpu-freq">—</span>
+      </div>
+      <div class="sysinfo-row">
+        <span class="sysinfo-label">Total Usage</span>
+        <div class="sysinfo-bar-wrap">
+          <div class="sysinfo-bar-track">
+            <div class="sysinfo-bar-fill" id="cpu-bar"></div>
+          </div>
+          <span class="sysinfo-bar-label" id="cpu-usage">—</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sysinfo-divider"></div>
+
+    {# RAM #}
+    <div class="sysinfo-section">
+      <div class="sysinfo-section-title">🧠 RAM</div>
+      <div class="sysinfo-row">
+        <span class="sysinfo-label">Total</span>
+        <span class="sysinfo-value font-mono" id="ram-total">—</span>
+      </div>
+      <div class="sysinfo-row">
+        <span class="sysinfo-label">Used / Free</span>
+        <span class="sysinfo-value font-mono" id="ram-used-free">—</span>
+      </div>
+      <div class="sysinfo-row">
+        <span class="sysinfo-label">Utilization</span>
+        <div class="sysinfo-bar-wrap">
+          <div class="sysinfo-bar-track">
+            <div class="sysinfo-bar-fill" id="ram-bar"></div>
+          </div>
+          <span class="sysinfo-bar-label" id="ram-usage">—</span>
+        </div>
+      </div>
+    </div>
+
+    {# GPU #}
+    <div id="gpu-section" style="display:none;">
+      <div class="sysinfo-divider"></div>
+      <div class="sysinfo-section" id="gpu-list"></div>
+    </div>
+
+    <div id="sysinfo-error" class="alert alert-warning" style="display:none; margin-top: var(--space-4);">
+      <div class="alert-content">
+        <p class="alert-text" id="sysinfo-error-msg">Could not load system info.</p>
+      </div>
+    </div>
+  </div>
+
 </div>
 
+{% block extra_scripts %}
+<script>
+(function () {
+  const POLL_MS = 3000;
+
+  function pct(val) { return Math.min(100, Math.max(0, val)); }
+
+  function barColor(p) {
+    if (p < 60) return 'var(--clr-success)';
+    if (p < 80) return 'var(--clr-warning)';
+    return 'var(--clr-danger)';
+  }
+
+  function setBar(barId, percent) {
+    const bar = document.getElementById(barId);
+    if (!bar) return;
+    bar.style.width = pct(percent) + '%';
+    bar.style.background = barColor(percent);
+  }
+
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+
+  function renderGPUs(gpus) {
+    const section = document.getElementById('gpu-section');
+    const list = document.getElementById('gpu-list');
+    if (!section || !list) return;
+    if (!gpus || gpus.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = '';
+    list.innerHTML = '';
+    gpus.forEach((g, i) => {
+      const id = `gpu${i}`;
+      list.innerHTML += `
+        <div class="sysinfo-section-title">🎮 GPU ${i + 1}: ${g.name}</div>
+        <div class="sysinfo-row">
+          <span class="sysinfo-label">Load</span>
+          <div class="sysinfo-bar-wrap">
+            <div class="sysinfo-bar-track"><div class="sysinfo-bar-fill" id="${id}-bar"></div></div>
+            <span class="sysinfo-bar-label" id="${id}-load">—</span>
+          </div>
+        </div>
+        <div class="sysinfo-row">
+          <span class="sysinfo-label">VRAM</span>
+          <div class="sysinfo-bar-wrap">
+            <div class="sysinfo-bar-track"><div class="sysinfo-bar-fill" id="${id}-vbar"></div></div>
+            <span class="sysinfo-bar-label" id="${id}-vmem">—</span>
+          </div>
+        </div>
+        ${g.temperature_c != null ? `
+        <div class="sysinfo-row">
+          <span class="sysinfo-label">Temperature</span>
+          <span class="sysinfo-value font-mono">${g.temperature_c} °C</span>
+        </div>` : ''}
+      `;
+      // Set bars after insertion
+      setBar(`${id}-bar`, g.load_percent);
+      setText(`${id}-load`, `${g.load_percent}%`);
+      setBar(`${id}-vbar`, g.mem_percent);
+      setText(`${id}-vmem`, `${g.mem_used_mb} MB / ${g.mem_total_mb} MB (${g.mem_percent}%)`);
+    });
+  }
+
+  async function fetchSysInfo() {
+    try {
+      const resp = await fetch('/settings/sysinfo', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const d = await resp.json();
+
+      // CPU
+      setText('cpu-name', d.cpu.name || '—');
+      setText('cpu-cores', `${d.cpu.physical_cores} physical / ${d.cpu.logical_cores} logical`);
+      const freq = d.cpu.freq_mhz != null
+        ? `${d.cpu.freq_mhz} MHz (max ${d.cpu.freq_max_mhz} MHz)`
+        : 'N/A';
+      setText('cpu-freq', freq);
+      setBar('cpu-bar', d.cpu.usage_total);
+      setText('cpu-usage', d.cpu.usage_total + '%');
+
+      // RAM
+      setText('ram-total', d.ram.total_gb + ' GB');
+      setText('ram-used-free', `${d.ram.used_gb} GB used / ${d.ram.available_gb} GB free`);
+      setBar('ram-bar', d.ram.percent);
+      setText('ram-usage', d.ram.percent + '%');
+
+      // GPU
+      renderGPUs(d.gpus);
+
+      // Timestamp
+      setText('sysinfo-updated', 'Updated ' + new Date().toLocaleTimeString());
+      const errEl = document.getElementById('sysinfo-error');
+      if (errEl) errEl.style.display = 'none';
+    } catch (e) {
+      const errEl = document.getElementById('sysinfo-error');
+      const errMsg = document.getElementById('sysinfo-error-msg');
+      if (errEl) errEl.style.display = '';
+      if (errMsg) errMsg.textContent = 'Could not load system info: ' + e.message;
+    }
+  }
+
+  fetchSysInfo();
+  setInterval(fetchSysInfo, POLL_MS);
+})();
+</script>
 {% endblock %}
+
+{% endblock %}
+

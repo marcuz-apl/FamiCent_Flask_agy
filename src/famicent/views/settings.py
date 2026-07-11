@@ -5,6 +5,9 @@ Provides application settings: profile info and MFA re-enrollment.
 from __future__ import annotations
 
 import logging
+import platform
+
+import psutil
 
 from flask import Blueprint, jsonify, render_template, request, session
 
@@ -106,3 +109,54 @@ def mfa_confirm():  # type: ignore[no-untyped-def]
             db.commit()
 
     return jsonify({"success": True})
+
+
+@settings_bp.route("/sysinfo", methods=["GET"])
+@login_required
+@mfa_required
+def sysinfo() -> "flask.Response":  # type: ignore[name-defined]
+    """Return live CPU, RAM, and GPU statistics as JSON.
+
+    GPU info is collected via optional GPUtil. Falls back gracefully when
+    no NVIDIA GPU or GPUtil is not installed.
+    """
+    # ── CPU ─────────────────────────────────────────────────────────
+    cpu_freq = psutil.cpu_freq()
+    cpu_info = {
+        "name": platform.processor() or "Unknown CPU",
+        "physical_cores": psutil.cpu_count(logical=False) or 1,
+        "logical_cores": psutil.cpu_count(logical=True) or 1,
+        "freq_mhz": round(cpu_freq.current, 0) if cpu_freq else None,
+        "freq_max_mhz": round(cpu_freq.max, 0) if cpu_freq else None,
+        "usage_total": psutil.cpu_percent(interval=0.1),
+        "usage_per_core": psutil.cpu_percent(interval=0.1, percpu=True),
+    }
+
+    # ── RAM ─────────────────────────────────────────────────────────
+    vm = psutil.virtual_memory()
+    ram_info = {
+        "total_gb": round(vm.total / (1024 ** 3), 2),
+        "available_gb": round(vm.available / (1024 ** 3), 2),
+        "used_gb": round(vm.used / (1024 ** 3), 2),
+        "percent": vm.percent,
+    }
+
+    # ── GPU ─────────────────────────────────────────────────────────
+    gpus: list[dict] = []
+    try:
+        import GPUtil  # type: ignore[import-untyped]
+        for g in GPUtil.getGPUs():
+            gpus.append({
+                "name": g.name,
+                "load_percent": round(g.load * 100, 1),
+                "mem_total_mb": round(g.memoryTotal, 0),
+                "mem_used_mb": round(g.memoryUsed, 0),
+                "mem_free_mb": round(g.memoryFree, 0),
+                "mem_percent": round(g.memoryUsed / g.memoryTotal * 100, 1) if g.memoryTotal else 0,
+                "temperature_c": g.temperature,
+            })
+    except Exception:
+        gpus = []
+
+    return jsonify({"cpu": cpu_info, "ram": ram_info, "gpus": gpus})
+
