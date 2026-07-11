@@ -142,6 +142,10 @@ ul, ol { list-style: none; }
   grid-template-columns: 0 1fr;
 }
 
+.app-shell.sidebar-hidden .app-main {
+  grid-column: 1 / -1;
+}
+
 /* Sidebar */
 .sidebar {
   grid-row: 2;
@@ -301,7 +305,7 @@ ul, ol { list-style: none; }
 }
 
 .brand-name {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--clr-text-primary);

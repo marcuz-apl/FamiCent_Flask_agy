@@ -1030,6 +1030,8 @@ const initSidebarAutoHide = () => {
   const shell = document.querySelector('.app-shell');
   if (!shell) return;
 
+  if (document.body.dataset.page === 'docs') return;
+
   let idleTime = 0;
   const idleLimit = 180; // 3 minutes = 180 seconds
 

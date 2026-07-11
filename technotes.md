@@ -110,3 +110,20 @@ To mitigate the risk of default admin credentials:
 2. Upon login, if `password_changed` is false, a banner is rendered at the top of the dashboard.
 3. The banner provides modal prompts for manual password updating or automated secure password generation (24-character mixed-set sequence).
 4. Once changed, `password_changed` is set to `True` in the database, dismissing the banner permanently.
+
+---
+
+## 6. Layout, Theme Switcher, Inactivity Auto-Hide & Git Version Hooks
+
+### 6.1 Theme Switcher (Dark/Light Modes)
+- **Persisted State**: The chosen theme is persisted in `localStorage` under the key `theme`.
+- **Flicker Mitigation**: An inline script in the `<head>` tag of `base.html` evaluates `localStorage` instantly upon parser initialization, injecting the `.light-theme` class to the root `<html>` tag before the render tree is constructed. This blocks flashes of unstyled content (FOUC).
+
+### 6.2 Sidebar Inactivity Auto-Hide
+- **Timer Mechanism**: An inactivity checker in `app.js` runs a seconds accumulator. Interaction events (`mousemove`, `keypress`, `click`, `scroll`, `touchstart`) instantly reset the counter to `0`.
+- **Transition Style**: Upon reaching `180` seconds (3 minutes) of inactivity, the `.sidebar-hidden` class is toggled on `.app-shell`. The sidebar slides off-screen via `transform: translateX(-100%)` and scales the grid column structure to `0 1fr` over a CSS transition.
+
+### 6.3 Automated Version-Bumping Git Hooks
+- **Installation script**: `install_hooks.py` populates `.git/hooks/pre-commit` and `.git/hooks/commit-msg` hooks automatically.
+- **Pre-Commit phase**: Bumps the version integer in `src/famicent/__init__.py` and runs `git add` to stage the changes.
+- **Commit-Msg phase**: Executes `bump_version.py` with `--no-bump` argument to prepend `v{version} build {timestamp}` to the Conventional Commits message file without double-bumping the version on disk.

@@ -17,6 +17,9 @@ The application is built on a lightweight Flask backend and served locally on `l
 - **Payment Tracking**: Record and edit payments, track history, and monitor upcoming obligations.
 - **Admin Database Viewer (Looker)**: Allows administrators to run read-only SQLite queries to inspect the system tables.
 - **Profile & Session Settings**: Configure custom session timeouts (60s to 24h) and reset MFA configurations.
+- **Theme Toggle**: Real-time persisted theme switcher supporting both dark and light UI states without flashes on load.
+- **Sidebar Auto-Hide**: Hides the sidebar automatically after 3 minutes of inactivity to expand workspace visibility, reverting instantly on cursor activity.
+- **Interactive Local Documentation**: Access a comprehensive operational guide via the `/docs` route directly.
 
 ---
 
@@ -59,6 +62,11 @@ The application is built on a lightweight Flask backend and served locally on `l
 4. **Initialize/Upgrade database schema**:
    ```powershell
    alembic upgrade head
+   ```
+
+5. **Install automated version hooks**:
+   ```powershell
+   python .hooks/install_hooks.py
    ```
 
 ---

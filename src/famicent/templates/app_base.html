@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div class="app-shell">
+<div class="app-shell {% if active_page == 'docs' %}sidebar-hidden{% endif %}">
 
   {# ── Sidebar ─────────────────────────────────────────────── #}
   <aside class="sidebar" id="sidebar" aria-label="Main navigation">
@@ -89,8 +89,9 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">{% block page_heading %}{% endblock %}</h1>
-        <p class="page-subtitle">{% block page_subtitle %}Manage your family finances and obligations.{% endblock %}</p>
+        <p class="page-subtitle">{% block page_subheading %}{% endblock %}</p>
       </div>
+      {% block page_actions %}{% endblock %}
     </div>
     {% block content %}{% endblock %}
   </main>
