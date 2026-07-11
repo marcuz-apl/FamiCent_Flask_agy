@@ -105,10 +105,10 @@
       &copy; 2026, Alfazen Inc. All rights reserved.
     </div>
     <div class="footer-right">
-      <a href="tel:+15550199" class="footer-social-link" title="Call Us" aria-label="Telephone">📞</a>
-      <a href="https://alfazen.example.com" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="Website" aria-label="Web">🌐</a>
-      <a href="https://x.com/alfazen" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="Twitter/X" aria-label="Twitter/X">🐦</a>
-      <a href="https://linkedin.com/company/alfazen" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="LinkedIn" aria-label="LinkedIn">💼</a>
+      <button type="button" class="footer-social-link" title="Call Us" aria-label="Telephone" data-modal-open="phone-modal">📞</button>
+      <a href="https://www.alfazen.org" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="Website" aria-label="Web">🌐</a>
+      <a href="https://x.com/marcuszou" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="Twitter/X" aria-label="Twitter/X">🐦</a>
+      <a href="https://www.linkedin.com/company/135316084/" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="LinkedIn" aria-label="LinkedIn">💼</a>
     </div>
   </footer>
 
@@ -133,12 +133,31 @@
       </div>
     </div>
     
-    <p class="text-muted" style="font-size: var(--font-size-xs); line-height: 1.4;">
+    <p class="text-muted about-dialog-copyright">
       Developed with ❤️ by the FamiCent Team.<br />
-      &copy; 2026 FamiCent. All rights reserved.
+      &copy; 2026 Alfazen Inc. All rights reserved.
     </p>
     <div class="modal-footer about-dialog-footer">
       <button type="button" class="btn btn-primary" data-modal-close id="about-modal-close-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+{# ── Phone Modal ─────────────────────────────────────────── #}
+<div class="modal-overlay" id="phone-modal" role="dialog"
+     aria-modal="true" aria-labelledby="phone-modal-title">
+  <div class="modal text-center about-dialog-modal">
+    <div class="modal-header about-dialog-header">
+      <div class="brand-icon about-dialog-icon" aria-hidden="true">📞</div>
+    </div>
+    <div class="mb-6">
+      <h2 class="modal-title" id="phone-modal-title">Company Phone</h2>
+      <p class="text-secondary mt-4 phone-modal-number">
+        +1 (587) 887-8048
+      </p>
+    </div>
+    <div class="modal-footer about-dialog-footer">
+      <button type="button" class="btn btn-primary" data-modal-close id="phone-modal-close-btn">Close</button>
     </div>
   </div>
 </div>
@@ -181,12 +200,12 @@
       <div class="alert alert-info mb-4">
         <div class="alert-content">
           <p class="alert-title">Support Hours</p>
-          <p class="alert-text">Monday - Friday, 9:00 AM - 5:00 PM EST</p>
+          <p class="alert-text">Monday - Friday, 9:00 AM - 5:00 PM MST</p>
         </div>
       </div>
-      <p class="mb-2"><strong>📞 Phone:</strong> +1 (555) 0199</p>
-      <p class="mb-2"><strong>📧 Email:</strong> support@alfazen.example.com</p>
-      <p><strong>🌐 Web:</strong> <a href="https://alfazen.example.com" target="_blank" rel="noopener noreferrer" class="contact-dialog-link">alfazen.example.com</a></p>
+      <p class="mb-2"><strong>📞 Phone:</strong> +1 (587) 887-8048</p>
+      <p class="mb-2"><strong>📧 Email:</strong> support@alfazen.org</p>
+      <p><strong>🌐 Web:</strong> <a href="https://www.alfazen.org" target="_blank" rel="noopener noreferrer" class="contact-dialog-link">www.alfazen.org</a></p>
     </div>
     <div class="modal-footer modal-footer-no-border">
       <button type="button" class="btn btn-primary" data-modal-close id="contact-modal-close-btn">Close</button>

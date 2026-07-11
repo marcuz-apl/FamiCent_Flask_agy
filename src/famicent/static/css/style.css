@@ -410,6 +410,26 @@ html.light-theme .theme-icon-dark {
   max-width: 450px !important;
 }
 
+.about-dialog-modal .modal-title {
+  font-size: var(--font-size-3xl);
+}
+
+.about-dialog-modal .text-muted.mt-2 {
+  font-size: var(--font-size-lg);
+}
+
+.about-dialog-modal .alert-title {
+  font-size: var(--font-size-lg);
+}
+
+.about-dialog-modal .alert-text {
+  font-size: var(--font-size-lg);
+}
+
+.about-dialog-modal .about-dialog-copyright {
+  font-size: var(--font-size-base);
+}
+
 .about-dialog-header {
   justify-content: center !important;
   border-bottom: none !important;
@@ -427,6 +447,16 @@ html.light-theme .theme-icon-dark {
   justify-content: center !important;
   border-top: none !important;
   padding-top: var(--space-4) !important;
+}
+
+.about-dialog-copyright {
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+}
+
+.phone-modal-number {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-semibold);
 }
 
 /* Main Content */
@@ -1370,6 +1400,11 @@ tbody td {
   color: var(--clr-text-secondary);
   transition: transform var(--transition-fast), color var(--transition-fast);
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .footer-social-link:hover {
