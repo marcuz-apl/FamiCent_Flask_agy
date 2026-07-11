@@ -1,0 +1,96 @@
+{# Template: dbviewer.html — Read-only SQLite Looker panel for admins. #}
+{% extends "app_base.html" %}
+
+{% block title %}Database Looker{% endblock %}
+{% block page_name %}dbviewer{% endblock %}
+{% block page_heading %}Database Looker{% endblock %}
+
+{% set active_page = 'dbviewer' %}
+
+{% block content %}
+<div style="display: grid; gap: var(--space-6); max-width: 100%;">
+
+  {# Header Table dropdown menu browser #}
+  <div class="card">
+    <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+      <label class="font-bold" for="table-select-dropdown" style="font-size: var(--font-size-base);">
+        Table Browser:
+      </label>
+      <select id="table-select-dropdown" class="form-control" style="width: auto; min-width: 240px;" onchange="location = this.value;">
+        <option value="{{ url_for('dbviewer.index') }}">-- Select a table to view --</option>
+        {% for t in tables %}
+        <option value="{{ url_for('dbviewer.index', table=t) }}" {% if selected_table == t %}selected{% endif %}>
+          📂 {{ t }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  {# Custom SQL console #}
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">SQL Console</div>
+      <span class="badge badge-insurance">Read-only Mode</span>
+    </div>
+    <div style="padding: var(--space-4);">
+      <form id="custom-query-form" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <div class="form-group">
+          <textarea id="sql-query" name="sql" class="form-control font-mono" rows="4"
+                    placeholder="SELECT * FROM users LIMIT 10; (Press Ctrl + Enter to run)" style="resize: vertical; font-size: var(--font-size-sm);"></textarea>
+        </div>
+        <p class="form-error" id="query-error-display" role="alert"></p>
+        <div class="d-flex justify-between align-center">
+          <span class="text-muted" style="font-size: var(--font-size-xs);">
+            🛡 Write actions (INSERT, UPDATE, DELETE, etc.) are strictly forbidden.
+          </span>
+          <button type="submit" class="btn btn-primary" id="run-query-btn">Run Query (Ctrl+Enter)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {# Results view #}
+  <div class="card" id="results-card" style="max-width: 100%; overflow: hidden;">
+    <div class="card-header">
+      <div class="card-title" id="results-title">
+        {% if selected_table %}
+          Showing data for: <code>{{ selected_table }}</code> (First 100 rows)
+        {% else %}
+          Query Results
+        {% endif %}
+      </div>
+    </div>
+    <div class="table-wrapper" id="results-table-wrapper" style="overflow-x: auto; max-width: 100%;">
+      {% if selected_table and data %}
+      <table id="looker-results-table">
+        <thead>
+          <tr>
+            {% for col in columns %}
+            <th>{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in data %}
+          <tr>
+            {% for cell in row %}
+            <td>{{ cell }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state" style="padding: var(--space-8);">
+        <div class="empty-state-icon" aria-hidden="true">🔍</div>
+        <div class="empty-state-title">No query executed</div>
+        <p class="empty-state-text">Select a table from the dropdown above or type a custom SQL SELECT query.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

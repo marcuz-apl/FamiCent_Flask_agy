@@ -1,0 +1,102 @@
+{# Template: mfa.html — MFA enrollment (setup) and verification (verify) page. #}
+{% extends "base.html" %}
+
+{% block title %}{% if mode == 'setup' %}MFA Setup{% else %}Verify Identity{% endif %}{% endblock %}
+{% block page_name %}mfa{% endblock %}
+
+{% block body %}
+<div class="login-page" role="main">
+  <div class="login-bg-gradient" aria-hidden="true"></div>
+
+  <div class="login-card" role="region"
+       aria-label="{% if mode == 'setup' %}MFA Enrollment{% else %}MFA Verification{% endif %}">
+
+    <div class="login-logo">
+      <div class="login-logo-icon" aria-hidden="true">🔐</div>
+      <div class="login-logo-name">Fami<span>Cent</span></div>
+      <p class="login-tagline">
+        {% if mode == 'setup' %}Set up two-factor authentication{% else %}Enter your authenticator code{% endif %}
+      </p>
+    </div>
+
+    {% if mode == 'setup' %}
+      <h2 class="login-form-title">Enroll Authenticator</h2>
+
+      <div class="alert alert-info" role="note">
+        <div class="alert-content">
+          <p class="alert-title">One-time setup required</p>
+          <p class="alert-text">
+            Scan the QR code with your authenticator app (Google Authenticator,
+            Authy, etc.), then enter the 6-digit code to confirm.
+          </p>
+        </div>
+      </div>
+
+      <div class="qr-container">
+        <img src="{{ qr_data }}" alt="QR code for MFA enrollment" class="qr-image"
+             width="180" height="180" />
+        <p class="text-muted text-center" style="font-size: var(--font-size-xs);">
+          Can't scan? Enter this secret manually:
+        </p>
+        <div class="secret-code" id="mfa-setup-secret">{{ secret }}</div>
+      </div>
+
+    {% else %}
+      <h2 class="login-form-title">Two-Factor Authentication</h2>
+
+      <div class="alert alert-info" role="note">
+        <div class="alert-content">
+          <p class="alert-text">Open your authenticator app and enter the 6-digit code.</p>
+        </div>
+      </div>
+    {% endif %}
+
+    <form
+      action="{{ url_for('auth.mfa_setup') if mode == 'setup' else url_for('auth.mfa_verify') }}"
+      method="post"
+      id="mfa-form"
+      aria-label="MFA code form"
+      novalidate
+    >
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+      <div class="form-group mt-4">
+        <label class="form-label" for="code">Authentication Code</label>
+        <input
+          type="text"
+          id="code"
+          name="code"
+          class="form-control otp-input"
+          placeholder="000000"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          autocomplete="one-time-code"
+          required
+          autofocus
+        />
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'error' if category == 'error' else category }}" role="alert">
+            <div class="alert-content">
+              <p class="alert-text">{{ message }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <button type="submit" class="btn btn-primary w-full btn-lg mt-4" id="mfa-submit-btn">
+        {% if mode == 'setup' %}Activate MFA{% else %}Verify Code{% endif %}
+      </button>
+    </form>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('auth.login') }}" class="text-muted" style="font-size: var(--font-size-sm);">
+        ← Back to login
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

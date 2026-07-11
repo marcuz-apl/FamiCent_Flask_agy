@@ -1,0 +1,91 @@
+{# Template: app_base.html — Authenticated shell with sidebar navigation. #}
+{% extends "base.html" %}
+
+{% block body %}
+<div class="app-shell">
+
+  {# ── Sidebar ─────────────────────────────────────────────── #}
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon" aria-hidden="true">💰</div>
+      <div>
+        <div class="sidebar-brand-name">Fami<span>Cent</span></div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Site navigation">
+      <div class="sidebar-nav-label">Menu</div>
+      <a href="{{ url_for('dashboard.index') }}"
+         class="nav-item {% if active_page == 'dashboard' %}active{% endif %}"
+         id="nav-dashboard">
+        <span class="nav-icon" aria-hidden="true">📊</span>
+        Dashboard
+      </a>
+      <a href="{{ url_for('accounts.index') }}"
+         class="nav-item {% if active_page == 'accounts' %}active{% endif %}"
+         id="nav-accounts">
+        <span class="nav-icon" aria-hidden="true">🏦</span>
+        Accounts
+      </a>
+      <a href="{{ url_for('payments.index') }}"
+         class="nav-item {% if active_page == 'payments' %}active{% endif %}"
+         id="nav-payments">
+        <span class="nav-icon" aria-hidden="true">💳</span>
+        Payments
+      </a>
+      {% if session.get('role') == 'admin' %}
+      <a href="{{ url_for('settings.index') }}"
+         class="nav-item {% if active_page == 'settings' %}active{% endif %}"
+         id="nav-settings">
+        <span class="nav-icon" aria-hidden="true">⚙️</span>
+        Settings
+      </a>
+      <a href="{{ url_for('users.index') }}"
+         class="nav-item {% if active_page == 'users' %}active{% endif %}"
+         id="nav-users">
+        <span class="nav-icon" aria-hidden="true">👥</span>
+        Users
+      </a>
+      <a href="{{ url_for('dbviewer.index') }}"
+         class="nav-item {% if active_page == 'dbviewer' %}active{% endif %}"
+         id="nav-dbviewer">
+        <span class="nav-icon" aria-hidden="true">🔎</span>
+        DB Looker
+      </a>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-footer">
+      <form action="{{ url_for('auth.logout') }}" method="post" id="logout-form">
+        <input type="hidden" name="csrf_token" value="{{ session.get('csrf_token', '') }}" />
+        <button type="submit" class="btn btn-ghost w-full" id="logout-btn" aria-label="Log out">
+          <span aria-hidden="true">🚪</span> Log Out
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  {# ── Header ──────────────────────────────────────────────── #}
+  <header class="app-header" role="banner">
+    <div class="d-flex align-center gap-3">
+      <button class="btn btn-ghost btn-sm" id="sidebar-toggle" aria-label="Toggle sidebar"
+              style="display:none;" aria-expanded="false">☰</button>
+      <h1 class="header-title">{% block page_heading %}{% endblock %}</h1>
+    </div>
+    <div class="header-actions">
+      <div class="header-user">
+        <div class="header-avatar" aria-hidden="true">
+          {{ session.get('username', 'U')[0].upper() }}
+        </div>
+        <span>{{ session.get('username', '') }}</span>
+      </div>
+    </div>
+  </header>
+
+  {# ── Main Content ────────────────────────────────────────── #}
+  <main class="app-main" id="main-content" role="main">
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
+{% endblock %}

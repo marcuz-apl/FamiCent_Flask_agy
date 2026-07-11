@@ -1,0 +1,1 @@
+"""FamiCent authentication module."""

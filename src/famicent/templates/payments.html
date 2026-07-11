@@ -1,0 +1,251 @@
+{# Template: payments.html — Payment history with filter, record modal, and delete. #}
+{% extends "app_base.html" %}
+
+{% block title %}Payments{% endblock %}
+{% block page_name %}payments{% endblock %}
+{% block page_heading %}Payments{% endblock %}
+
+{% set active_page = 'payments' %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <p class="page-subtitle">Track and record your payment history</p>
+  </div>
+  {% if session.get('role') in ('admin', 'editor') %}
+  <button class="btn btn-primary" id="record-payment-btn"
+          data-modal-open="record-payment-modal">
+    + Record Payment
+  </button>
+  {% endif %}
+</div>
+
+{# ── Filter Bar ───────────────────────────────────────────── #}
+<div class="card mb-6" id="payment-filter-card">
+  <div class="d-flex align-center gap-4">
+    <label class="form-label" for="payment-account-filter" style="white-space: nowrap; margin-bottom: 0;">
+      Filter by Account:
+    </label>
+    <select id="payment-account-filter" class="form-control" style="max-width: 320px;"
+            aria-label="Filter payments by account">
+      <option value="">All Accounts</option>
+      {% for acc in accounts %}
+        <option value="{{ acc.id }}" {% if account_filter == acc.id %}selected{% endif %}>
+          {{ acc.name }}{% if acc.provider %} ({{ acc.provider }}){% endif %}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+{# ── Payments Table ────────────────────────────────────────── #}
+{% if payments %}
+<div class="card" id="payments-table-card">
+  <div class="table-wrapper">
+    <table id="payments-table">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Method</th>
+          {% if session.get('role') in ('admin', 'editor') %}
+          <th>Actions</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+        <tr id="payment-row-{{ p.id }}">
+          <td>
+            <span class="font-bold">{{ account_map.get(p.account_id, 'Unknown') }}</span>
+          </td>
+          <td>
+            <span class="font-mono text-accent">{{ format_currency(p.amount) }}</span>
+          </td>
+          <td class="td-muted">{{ format_date(p.payment_date) }}</td>
+          <td>
+            <span class="badge badge-custom">
+              {% if p.method == 'credit_card' %}
+                Credit Card
+              {% elif p.method == 'debit_card' %}
+                Debit Card
+              {% elif p.method == 'bank_transfer' %}
+                Bank Transfer
+              {% elif p.method == 'pad' %}
+                PAD
+              {% else %}
+                {{ p.method.replace('_', ' ').title() }}
+              {% endif %}
+            </span>
+          </td>
+          <td style="display: flex; gap: var(--space-2);">
+            <button class="btn btn-ghost btn-sm" data-edit-payment="{{ p.id }}"
+                    id="edit-payment-{{ p.id }}-btn"
+                    aria-label="Edit payment of {{ format_currency(p.amount) }}">
+              ✏️
+            </button>
+            <button class="btn btn-danger btn-sm" data-delete-payment="{{ p.id }}"
+                    id="delete-payment-{{ p.id }}-btn"
+                    aria-label="Delete payment of {{ format_currency(p.amount) }}">
+              🗑
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="empty-state" id="no-payments-state">
+  <div class="empty-state-icon" aria-hidden="true">💳</div>
+  <div class="empty-state-title">No payments recorded</div>
+  <p class="empty-state-text">
+    {% if account_filter %}
+      No payments for this account yet.
+    {% else %}
+      Record your first payment to start tracking history.
+    {% endif %}
+  </p>
+  <button class="btn btn-primary" data-modal-open="record-payment-modal"
+          id="first-record-payment-btn">
+    + Record Payment
+  </button>
+</div>
+{% endif %}
+
+{# ── Record Payment Modal ──────────────────────────────────── #}
+<div class="modal-overlay" id="record-payment-modal" role="dialog"
+     aria-modal="true" aria-labelledby="record-payment-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="record-payment-title">Record Payment</h2>
+      <button class="modal-close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <form id="record-payment-form" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label class="form-label" for="payment-account-id">Account *</label>
+        <select id="payment-account-id" name="account_id" class="form-control" required>
+          <option value="" disabled selected>Select an account</option>
+          {% for acc in accounts %}
+            <option value="{{ acc.id }}">{{ acc.name }}{% if acc.provider %} — {{ acc.provider }}{% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="payment-amount">Amount ($) *</label>
+          <input type="number" id="payment-amount" name="amount" class="form-control"
+                 placeholder="0.00" step="0.01" min="0.01" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="payment-date">Payment Date *</label>
+          <div class="d-flex gap-2 align-center">
+            <input type="text" id="payment-date-yyyy" placeholder="YYYY" class="form-control text-center date-part" maxlength="4" style="width: 80px;" aria-label="Year" value="{{ now.strftime('%Y') if now else '' }}" />
+            <span>-</span>
+            <input type="text" id="payment-date-mm" placeholder="MM" class="form-control text-center date-part" maxlength="2" style="width: 60px;" aria-label="Month" value="{{ now.strftime('%m') if now else '' }}" />
+            <span>-</span>
+            <input type="text" id="payment-date-dd" placeholder="DD" class="form-control text-center date-part" maxlength="2" style="width: 60px;" aria-label="Day" value="{{ now.strftime('%d') if now else '' }}" />
+          </div>
+          <input type="hidden" id="payment-date" name="payment_date" value="{{ now.strftime('%Y-%m-%d') if now else '' }}" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="payment-method">Payment Method</label>
+        <select id="payment-method" name="method" class="form-control">
+          {% for method in payment_methods %}
+            <option value="{{ method }}">
+              {% if method == 'credit_card' %}
+                Credit Card
+              {% elif method == 'debit_card' %}
+                Debit Card
+              {% elif method == 'bank_transfer' %}
+                Bank Transfer
+              {% elif method == 'pad' %}
+                PAD
+              {% else %}
+                {{ method.replace('_', ' ').title() }}
+              {% endif %}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <p class="form-error" id="record-payment-error" role="alert"></p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="confirm-record-payment-btn">
+          Record Payment
+        </button>
+      </div>
+    </form>
+  </div>
+<!-- Edit Payment Modal -->
+<div class="modal-overlay" id="edit-payment-modal" role="dialog" aria-modal="true" aria-labelledby="edit-payment-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="edit-payment-title">Edit Payment Details</h2>
+      <button class="modal-close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <form id="edit-payment-form" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <div class="form-group">
+        <label class="form-label" for="edit-payment-account-id">Account *</label>
+        <select id="edit-payment-account-id" name="account_id" class="form-control" required>
+          <option value="" disabled selected>Select an account</option>
+          {% for acc in accounts %}
+            <option value="{{ acc.id }}">{{ acc.name }}{% if acc.provider %} — {{ acc.provider }}{% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="edit-payment-amount">Amount ($) *</label>
+          <input type="number" id="edit-payment-amount" name="amount" class="form-control" placeholder="0.00" step="0.01" min="0.01" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-payment-date">Payment Date *</label>
+          <div class="d-flex gap-2 align-center">
+            <input type="text" id="edit-payment-date-yyyy" placeholder="YYYY" class="form-control text-center date-part" maxlength="4" style="width: 80px;" aria-label="Year" />
+            <span>-</span>
+            <input type="text" id="edit-payment-date-mm" placeholder="MM" class="form-control text-center date-part" maxlength="2" style="width: 60px;" aria-label="Month" />
+            <span>-</span>
+            <input type="text" id="edit-payment-date-dd" placeholder="DD" class="form-control text-center date-part" maxlength="2" style="width: 60px;" aria-label="Day" />
+          </div>
+          <input type="hidden" id="edit-payment-date" name="payment_date" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-payment-method">Payment Method</label>
+        <select id="edit-payment-method" name="method" class="form-control">
+          {% for method in payment_methods %}
+            <option value="{{ method }}">
+              {% if method == 'credit_card' %}
+                Credit Card
+              {% elif method == 'debit_card' %}
+                Debit Card
+              {% elif method == 'bank_transfer' %}
+                Bank Transfer
+              {% elif method == 'pad' %}
+                PAD
+              {% else %}
+                {{ method.replace('_', ' ').title() }}
+              {% endif %}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <p class="form-error" id="edit-payment-error" role="alert"></p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="confirm-edit-payment-btn">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

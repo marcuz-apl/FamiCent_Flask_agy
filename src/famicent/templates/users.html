@@ -1,0 +1,214 @@
+{# Template: users.html — User management panel for admin to create/delete editors/viewers. #}
+{% extends "app_base.html" %}
+
+{% block title %}User Management{% endblock %}
+{% block page_name %}users{% endblock %}
+{% block page_heading %}User Management{% endblock %}
+
+{% set active_page = 'users' %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <p class="page-subtitle">Manage family access profiles (Maximum 5 editors/viewers)</p>
+  </div>
+  {% if non_admin_count < 5 %}
+  <button class="btn btn-primary" id="add-user-btn" data-modal-open="create-user-modal">
+    + Add Family User
+  </button>
+  {% else %}
+  <button class="btn btn-primary" id="add-user-btn" disabled title="Maximum of 5 members reached">
+    Maximum Limit Reached
+  </button>
+  {% endif %}
+</div>
+
+<div class="card mb-6">
+  <div class="card-header">
+    <div class="card-title">User Profiles ({{ non_admin_count }}/5 added)</div>
+  </div>
+  <div class="table-wrapper">
+    <table id="users-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Profile Name</th>
+          <th>Role</th>
+          <th>MFA Enrolled</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr id="user-row-{{ u.id }}">
+          <td>
+            <span class="font-bold">{{ u.username }}</span>
+          </td>
+          <td class="td-muted">{{ u.profile_name or '—' }}</td>
+          <td>
+            {% if u.role == 'admin' %}
+              <span class="badge badge-credit-card">admin</span>
+            {% elif u.role == 'editor' %}
+              <span class="badge badge-utility">editor</span>
+            {% else %}
+              <span class="badge badge-custom">viewer</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if u.mfa_enabled %}
+              <span class="badge badge-insurance">Active</span>
+            {% else %}
+              <span class="badge badge-subscription">Pending Enrollment</span>
+            {% endif %}
+          </td>
+          <td class="text-right">
+            <button class="btn btn-ghost btn-sm" data-edit-user="{{ u.id }}"
+                    id="edit-user-{{ u.id }}-btn" aria-label="Edit {{ u.username }}">
+              ✏️ Edit
+            </button>
+            {% if u.role != 'admin' %}
+              <button class="btn btn-danger btn-sm" data-delete-user="{{ u.id }}"
+                      id="delete-user-{{ u.id }}-btn" aria-label="Delete {{ u.username }}"
+                      style="margin-left: var(--space-2);">
+                🗑 Delete
+              </button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{# ── Create User Modal ────────────────────────────────────── #}
+<div class="modal-overlay" id="create-user-modal" role="dialog"
+     aria-modal="true" aria-labelledby="create-user-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="create-user-title">Add Family User</h2>
+      <button class="modal-close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <form id="create-user-form" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      
+      <div class="form-group">
+        <label class="form-label" for="user-username">Username *</label>
+        <input type="text" id="user-username" name="username" class="form-control"
+               placeholder="e.g. alice" required autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="user-profile-name">Profile Display Name</label>
+        <input type="text" id="user-profile-name" name="profile_name" class="form-control"
+               placeholder="e.g. Alice Smith" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="user-password">Initial Password *</label>
+        <input type="password" id="user-password" name="password" class="form-control"
+               placeholder="Min. 8 characters" required />
+        <span class="text-muted" style="font-size: var(--font-size-xs); display: block; margin-top: var(--space-1);">
+          💡 Defaults to <strong>[username]123</strong> if left untouched.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="user-role">Role *</label>
+        <select id="user-role" name="role" class="form-control" required>
+          <option value="viewer" selected>Viewer (Read-only access)</option>
+          <option value="editor">Editor (Add/edit records)</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-top: var(--space-4);">
+        <label class="form-label d-flex align-center gap-2" style="cursor: pointer;">
+          <input type="checkbox" id="user-enforce-mfa" name="mfa_enforced" value="true" style="width: auto;" />
+          Enforce MFA (Requires user to setup/use TOTP authentication)
+        </label>
+      </div>
+
+      <p class="form-error" id="create-user-error" role="alert"></p>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="confirm-create-user-btn">
+          Create User
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ── Edit/Reset User Modal ─────────────────────────────────── #}
+<div class="modal-overlay" id="edit-user-modal" role="dialog"
+     aria-modal="true" aria-labelledby="edit-user-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="edit-user-title">Edit User Access</h2>
+      <button class="modal-close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <form id="edit-user-form" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" id="edit-user-username" class="form-control" disabled />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-user-profile-name">Profile Display Name</label>
+        <input type="text" id="edit-user-profile-name" name="profile_name" class="form-control"
+               placeholder="e.g. Alice Smith" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-user-password">Reset Password</label>
+        <input type="password" id="edit-user-password" name="password" class="form-control"
+               placeholder="Leave blank to keep current password" />
+        <span class="text-muted" style="font-size: var(--font-size-xs); display: block; margin-top: var(--space-1);">
+          💡 Only fill this field if you want to reset their password to a new value.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-user-role">Role *</label>
+        <select id="edit-user-role" name="role" class="form-control" required>
+          <option value="viewer">Viewer (Read-only access)</option>
+          <option value="editor">Editor (Add/edit records)</option>
+          <option value="admin">System Admin (Full management access)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-user-session-timeout">Session Inactivity Timeout (Seconds)</label>
+        <input type="number" id="edit-user-session-timeout" name="session_timeout" class="form-control"
+               placeholder="300" min="60" max="86400" required />
+      </div>
+
+      <div class="form-group" id="edit-user-mfa-group" style="margin-top: var(--space-4);">
+        <label class="form-label d-flex align-center gap-2" style="cursor: pointer;">
+          <input type="checkbox" id="edit-user-enforce-mfa" name="mfa_enforced" value="true" style="width: auto;" />
+          Enforce MFA (Requires user to setup/use TOTP authentication)
+        </label>
+        <label class="form-label d-flex align-center gap-2" style="cursor: pointer; margin-top: var(--space-2);">
+          <input type="checkbox" id="edit-user-reset-mfa" name="reset_mfa" value="true" style="width: auto;" />
+          Force MFA Reset (Requires new QR code registration at next login)
+        </label>
+        <span class="text-muted" id="edit-user-mfa-status" style="font-size: var(--font-size-xs); display: block; margin-top: var(--space-1);">
+          MFA Status: Active
+        </span>
+      </div>
+
+      <p class="form-error" id="edit-user-error" role="alert"></p>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="confirm-edit-user-btn">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

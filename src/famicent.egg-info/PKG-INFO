@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: famicent
+Version: 1.0.0
+Summary: Family financial-account management web app.
+Author: FamiCent Team
+Requires-Python: >=3.11
+Requires-Dist: Flask>=3.0
+Requires-Dist: SQLAlchemy>=2.0
+Requires-Dist: alembic
+Requires-Dist: cryptography
+Requires-Dist: argon2-cffi
+Requires-Dist: pyotp
+Requires-Dist: qrcode[pil]
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: pre-commit; extra == "dev"

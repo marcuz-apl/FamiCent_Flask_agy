@@ -1,0 +1,45 @@
+{# Template: settings.html — Application settings: displays security information panel. Profile and MFA configuration are managed under the unified Users panel. #}
+{% extends "app_base.html" %}
+
+{% block title %}Settings{% endblock %}
+{% block page_name %}settings{% endblock %}
+{% block page_heading %}Settings{% endblock %}
+
+{% set active_page = 'settings' %}
+
+{% block content %}
+
+<div style="max-width: 640px;">
+
+  {# ── Security Info ────────────────────────────────────────── #}
+  <div class="card" id="security-card">
+    <div class="card-header">
+      <div class="card-title">Security Information</div>
+    </div>
+    <div style="display: grid; gap: var(--space-4);">
+      <div class="d-flex align-center justify-between">
+        <span class="text-secondary">Encryption Standard</span>
+        <span class="badge badge-utility">AES-256-GCM</span>
+      </div>
+      <div class="d-flex align-center justify-between">
+        <span class="text-secondary">Key Derivation</span>
+        <span class="badge badge-utility">Argon2id (R18)</span>
+      </div>
+      <div class="d-flex align-center justify-between">
+        <span class="text-secondary">MFA Protocol</span>
+        <span class="badge badge-utility">TOTP RFC 6238</span>
+      </div>
+      <div class="d-flex align-center justify-between">
+        <span class="text-secondary">Your Custom Inactivity Lock</span>
+        <span class="badge badge-custom">{{ session_timeout }} seconds</span>
+      </div>
+      <div class="d-flex align-center justify-between">
+        <span class="text-secondary">Database Storage</span>
+        <span class="badge badge-insurance">Local Only (SQLite3)</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

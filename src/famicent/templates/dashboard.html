@@ -1,0 +1,255 @@
+{# Template: dashboard.html — Main dashboard with stats, upcoming payments, and account overview. #}
+{% extends "app_base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_name %}dashboard{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
+
+{% set active_page = 'dashboard' %}
+
+{% block content %}
+
+{# ── Admin Password Banner (R40-R45) ──────────────────────── #}
+{% if show_password_banner %}
+<div class="password-banner" id="password-banner" role="alert" aria-live="polite">
+  <div class="password-banner-icon" aria-hidden="true">⚠️</div>
+  <div class="password-banner-content">
+    <div class="password-banner-title">Default Password Detected</div>
+    <p class="password-banner-text">
+      Admin password is set to default. Please change it or generate a secure password.
+    </p>
+    <div class="password-banner-actions">
+      <button class="btn btn-warning btn-sm" id="banner-change-password-btn">
+        🔑 Change Password
+      </button>
+      <button class="btn btn-ghost btn-sm" id="banner-generate-password-btn">
+        ✨ Generate Password
+      </button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{# ── Stat Cards (FR-DASH-01) ──────────────────────────────── #}
+<div class="stat-grid">
+  <div class="stat-card" id="stat-outstanding">
+    <div class="stat-label">Total Outstanding</div>
+    <div class="stat-value">{{ total_outstanding }}</div>
+    <div class="stat-icon" aria-hidden="true">💸</div>
+  </div>
+  <div class="stat-card" id="stat-monthly">
+    <div class="stat-label">Paid This Month</div>
+    <div class="stat-value">{{ monthly_spending }}</div>
+    <div class="stat-icon" aria-hidden="true">📅</div>
+  </div>
+  <div class="stat-card" id="stat-accounts">
+    <div class="stat-label">Total Accounts</div>
+    <div class="stat-value font-mono">{{ accounts | length }}</div>
+    <div class="stat-icon" aria-hidden="true">🏦</div>
+  </div>
+  <div class="stat-card" id="stat-upcoming">
+    <div class="stat-label">Due Next 30 Days</div>
+    <div class="stat-value font-mono">{{ upcoming | length }}</div>
+    <div class="stat-icon" aria-hidden="true">🔔</div>
+  </div>
+</div>
+
+{# ── Two-column body ──────────────────────────────────────── #}
+<div style="display: grid; grid-template-columns: 1fr 380px; gap: var(--space-6);"
+     class="dashboard-columns">
+
+  {# Left: Recent Accounts #}
+  <div>
+    <div class="card" id="accounts-overview-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Accounts Overview</div>
+          <div class="card-subtitle">All tracked financial accounts</div>
+        </div>
+        <a href="{{ url_for('accounts.index') }}" class="btn btn-primary btn-sm"
+           id="view-all-accounts-btn">View All</a>
+      </div>
+
+      {% if accounts %}
+        {% for category, cat_accounts in accounts_by_category.items() %}
+        <div class="mb-4" id="category-group-{{ category }}">
+          <p class="text-muted mb-4" style="font-size: var(--font-size-xs); text-transform: uppercase;
+                                             letter-spacing: 0.07em; font-weight: 600;">
+            {{ category.replace('_', ' ').title() }}
+          </p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Account</th>
+                  <th>Provider</th>
+                  <th class="text-right">Balance</th>
+                  <th>Due Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for acc in cat_accounts %}
+                <tr>
+                  <td>
+                    <span class="badge badge-{{ acc.category.replace('_', '-') }}">
+                      {{ acc.category.replace('_', ' ') }}
+                    </span>
+                    <span class="font-bold" style="margin-left: var(--space-2);">{{ acc.name }}</span>
+                  </td>
+                  <td class="td-muted">{{ acc.provider or '—' }}</td>
+                  <td class="text-right font-mono">{{ format_currency(acc.balance) }}</td>
+                  <td class="td-muted">{{ format_date(acc.next_due_date) }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state" id="no-accounts-state">
+          <div class="empty-state-icon" aria-hidden="true">🏦</div>
+          <div class="empty-state-title">No accounts yet</div>
+          <p class="empty-state-text">Add your first account to start tracking your finances.</p>
+          <a href="{{ url_for('accounts.index') }}" class="btn btn-primary" id="add-first-account-btn">
+            + Add Account
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# Right: Upcoming Payments + Recent Activity #}
+  <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+
+    {# Upcoming Payments #}
+    <div class="card" id="upcoming-payments-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Upcoming Due Dates</div>
+          <div class="card-subtitle">Next 30 days</div>
+        </div>
+      </div>
+
+      {% if upcoming %}
+        <div class="upcoming-list" id="upcoming-list">
+          {% for acc in upcoming %}
+            {% set days_until = (acc.next_due_date - now).days if acc.next_due_date else 9999 %}
+            <div class="upcoming-item {% if days_until <= 3 %}due-soon{% elif days_until < 0 %}due-overdue{% endif %}"
+                 id="upcoming-{{ acc.id }}">
+              <div class="upcoming-date">
+                <div class="upcoming-date-day">{{ acc.next_due_date.strftime('%d') }}</div>
+                <div class="upcoming-date-month">{{ acc.next_due_date.strftime('%b') }}</div>
+              </div>
+              <div class="upcoming-info">
+                <div class="upcoming-name">{{ acc.name }}</div>
+                <div class="upcoming-provider">{{ acc.provider or acc.category.replace('_', ' ').title() }}</div>
+              </div>
+              <div class="upcoming-amount">{{ format_currency(acc.balance) }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state" id="no-upcoming-state" style="padding: var(--space-8);">
+          <div class="empty-state-icon" aria-hidden="true">✅</div>
+          <div class="empty-state-title">All clear!</div>
+          <p class="empty-state-text">No payments due in the next 30 days.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    {# Recent Payments #}
+    <div class="card" id="recent-payments-card">
+      <div class="card-header">
+        <div class="card-title">Recent Payments</div>
+        <a href="{{ url_for('payments.index') }}" class="btn btn-ghost btn-sm"
+           id="view-all-payments-btn">See All</a>
+      </div>
+      {% if recent_payments %}
+        <div class="upcoming-list" id="recent-payments-list">
+          {% for p in recent_payments %}
+          <div class="upcoming-item" id="recent-payment-{{ p.id }}">
+            <div class="upcoming-info">
+              <div class="upcoming-name">{{ format_currency(p.amount) }}</div>
+              <div class="upcoming-provider">{{ p.method.replace('_', ' ').title() }} · {{ format_date(p.payment_date) }}</div>
+            </div>
+            <span class="badge badge-utility">{{ p.method }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted text-center" style="padding: var(--space-4); font-size: var(--font-size-sm);">
+          No payments recorded yet.
+        </p>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+{# ── Change Password Modal ─────────────────────────────────── #}
+<div class="modal-overlay" id="change-password-modal" role="dialog"
+     aria-modal="true" aria-labelledby="change-password-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="change-password-title">Change Password</h2>
+      <button class="modal-close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <form id="change-password-form" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ session.get('csrf_token', '') }}" />
+      <div class="form-group">
+        <label class="form-label" for="new-password">New Password</label>
+        <div class="password-field">
+          <input type="password" id="new-password" name="new_password"
+                 class="form-control" placeholder="Min. 8 characters" required />
+          <button type="button" class="password-toggle" aria-label="Toggle">👁</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="confirm-password">Confirm Password</label>
+        <div class="password-field">
+          <input type="password" id="confirm-password" name="confirm_password"
+                 class="form-control" placeholder="Repeat new password" required />
+          <button type="button" class="password-toggle" aria-label="Toggle">👁</button>
+        </div>
+      </div>
+      <p class="form-error" id="change-password-error" role="alert"></p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="confirm-change-password-btn">
+          Update Password
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ── Generated Password Modal ──────────────────────────────── #}
+<div class="modal-overlay" id="generated-password-modal" role="dialog"
+     aria-modal="true" aria-labelledby="generated-password-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="generated-password-title">Your New Password</h2>
+      <button class="modal-close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <div class="alert alert-warning" role="note">
+      <div class="alert-content">
+        <p class="alert-title">Save this password now!</p>
+        <p class="alert-text">This password will not be shown again. Store it in a safe place.</p>
+      </div>
+    </div>
+    <div class="generated-password-display" id="generated-password-display"
+         aria-live="polite" role="status"></div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" id="copy-generated-password-btn">
+        Copy
+      </button>
+      <button type="button" class="btn btn-primary" data-modal-close
+              id="generated-password-done-btn">
+        Done
+      </button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

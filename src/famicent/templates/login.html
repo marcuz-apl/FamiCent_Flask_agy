@@ -1,0 +1,75 @@
+{# Template: login.html — Login page with username/password form. #}
+{% extends "base.html" %}
+
+{% block title %}Sign In{% endblock %}
+{% block page_name %}login{% endblock %}
+
+{% block body %}
+<div class="login-page" role="main">
+  <div class="login-bg-gradient" aria-hidden="true"></div>
+
+  <div class="login-card" role="region" aria-label="Login form">
+    <div class="login-logo">
+      <div class="login-logo-icon" aria-hidden="true">💰</div>
+      <div class="login-logo-name">Fami<span>Cent</span></div>
+      <p class="login-tagline">Secure family financial management</p>
+    </div>
+
+    <h2 class="login-form-title">Welcome back</h2>
+
+    <form action="{{ url_for('auth.login') }}" method="post" id="login-form"
+          aria-label="Sign in form" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          class="form-control"
+          placeholder="Enter your username"
+          autocomplete="username"
+          required
+          autofocus
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Master Password</label>
+        <div class="password-field">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          />
+          <button type="button" class="password-toggle" id="password-toggle-btn"
+                  aria-label="Toggle password visibility">👁</button>
+        </div>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'error' if category == 'error' else category }}" role="alert">
+            <div class="alert-content">
+              <p class="alert-text">{{ message }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <button type="submit" class="btn btn-primary w-full btn-lg mt-4" id="login-submit-btn">
+        Sign In
+      </button>
+    </form>
+
+    <p class="text-center text-muted mt-6" style="font-size: var(--font-size-xs);">
+      🔒 All data is stored locally and encrypted at rest.
+    </p>
+  </div>
+</div>
+{% endblock %}
