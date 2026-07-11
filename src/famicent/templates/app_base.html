@@ -8,46 +8,100 @@
   <aside class="sidebar" id="sidebar" aria-label="Main navigation">
 
     <nav class="sidebar-nav" aria-label="Site navigation">
-      <div class="sidebar-nav-label">Menu</div>
-      <a href="{{ url_for('dashboard.index') }}"
-         class="nav-item {% if active_page == 'dashboard' %}active{% endif %}"
-         id="nav-dashboard">
-        <span class="nav-icon" aria-hidden="true">📊</span>
-        Dashboard
-      </a>
-      <a href="{{ url_for('accounts.index') }}"
-         class="nav-item {% if active_page == 'accounts' %}active{% endif %}"
-         id="nav-accounts">
-        <span class="nav-icon" aria-hidden="true">🏦</span>
-        Accounts
-      </a>
-      <a href="{{ url_for('payments.index') }}"
-         class="nav-item {% if active_page == 'payments' %}active{% endif %}"
-         id="nav-payments">
-        <span class="nav-icon" aria-hidden="true">💳</span>
-        Payments
-      </a>
+      
+      <details class="sidebar-menu-group" open>
+        <summary class="sidebar-menu-summary">
+          <span>📊 Finance</span>
+          <span class="menu-arrow">▾</span>
+        </summary>
+        <div class="sidebar-menu-items">
+          <a href="{{ url_for('dashboard.index') }}"
+             class="nav-item {% if active_page == 'dashboard' %}active{% endif %}"
+             id="nav-dashboard">
+            <span class="nav-icon" aria-hidden="true">📈</span>
+            Dashboard
+          </a>
+          <a href="{{ url_for('accounts.index') }}"
+             class="nav-item {% if active_page == 'accounts' %}active{% endif %}"
+             id="nav-accounts">
+            <span class="nav-icon" aria-hidden="true">🏦</span>
+            Accounts
+          </a>
+          <a href="{{ url_for('payments.index') }}"
+             class="nav-item {% if active_page == 'payments' %}active{% endif %}"
+             id="nav-payments">
+            <span class="nav-icon" aria-hidden="true">💳</span>
+            Payments
+          </a>
+        </div>
+      </details>
+
       {% if session.get('role') == 'admin' %}
-      <a href="{{ url_for('settings.index') }}"
-         class="nav-item {% if active_page == 'settings' %}active{% endif %}"
-         id="nav-settings">
-        <span class="nav-icon" aria-hidden="true">⚙️</span>
-        Settings
-      </a>
-      <a href="{{ url_for('users.index') }}"
-         class="nav-item {% if active_page == 'users' %}active{% endif %}"
-         id="nav-users">
-        <span class="nav-icon" aria-hidden="true">👥</span>
-        Users
-      </a>
-      <a href="{{ url_for('dbviewer.index') }}"
-         class="nav-item {% if active_page == 'dbviewer' %}active{% endif %}"
-         id="nav-dbviewer">
-        <span class="nav-icon" aria-hidden="true">🔎</span>
-        DB Looker
-      </a>
+      <details class="sidebar-menu-group" open>
+        <summary class="sidebar-menu-summary">
+          <span>⚙️ Administration</span>
+          <span class="menu-arrow">▾</span>
+        </summary>
+        <div class="sidebar-menu-items">
+          <a href="{{ url_for('settings.index') }}"
+             class="nav-item {% if active_page == 'settings' %}active{% endif %}"
+             id="nav-settings">
+            <span class="nav-icon" aria-hidden="true">⚙️</span>
+            Settings
+          </a>
+          <a href="{{ url_for('users.index') }}"
+             class="nav-item {% if active_page == 'users' %}active{% endif %}"
+             id="nav-users">
+            <span class="nav-icon" aria-hidden="true">👥</span>
+            Users
+          </a>
+          <a href="{{ url_for('dbviewer.index') }}"
+             class="nav-item {% if active_page == 'dbviewer' %}active{% endif %}"
+             id="nav-dbviewer">
+            <span class="nav-icon" aria-hidden="true">🔎</span>
+            DB Looker
+          </a>
+        </div>
+      </details>
       {% endif %}
+      
     </nav>
+
+    {# Mobile Only Actions #}
+    <div class="sidebar-mobile-actions">
+      <div class="sidebar-user-profile">
+        <div class="sidebar-avatar" aria-hidden="true">
+          {{ session.get('username', 'U')[0].upper() }}
+        </div>
+        <span class="sidebar-username">{{ session.get('username', '') }}</span>
+      </div>
+      <div class="sidebar-action-buttons">
+        
+        <details class="sidebar-mobile-menu-details">
+          <summary class="btn btn-ghost btn-sm sidebar-mobile-btn">
+            <span>☰ Menu</span>
+            <span class="menu-arrow">▾</span>
+          </summary>
+          <div class="sidebar-mobile-nested-links">
+            <a href="{{ url_for('dashboard.index') }}" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">📊 Dashboard</a>
+            <a href="{{ url_for('accounts.index') }}" class="nav-item {% if active_page == 'accounts' %}active{% endif %}">🏦 Accounts</a>
+            <a href="{{ url_for('payments.index') }}" class="nav-item {% if active_page == 'payments' %}active{% endif %}">💳 Payments</a>
+            {% if session.get('role') == 'admin' %}
+            <a href="{{ url_for('settings.index') }}" class="nav-item {% if active_page == 'settings' %}active{% endif %}">⚙️ Settings</a>
+            <a href="{{ url_for('users.index') }}" class="nav-item {% if active_page == 'users' %}active{% endif %}">👥 Users</a>
+            <a href="{{ url_for('dbviewer.index') }}" class="nav-item {% if active_page == 'dbviewer' %}active{% endif %}">🔎 DB Looker</a>
+            {% endif %}
+          </div>
+        </details>
+
+        <a href="{{ url_for('dashboard.docs') }}" class="btn btn-ghost btn-sm sidebar-mobile-btn">📖 Docs</a>
+        <button class="btn btn-ghost btn-sm sidebar-mobile-btn" data-modal-open="about-modal">ℹ️ About</button>
+        <form action="{{ url_for('auth.logout') }}" method="post" id="sidebar-logout-form" style="display: inline-block;">
+          <input type="hidden" name="csrf_token" value="{{ session.get('csrf_token', '') }}" />
+          <button type="submit" class="btn btn-ghost btn-sm sidebar-mobile-btn" id="sidebar-logout-btn" aria-label="Log out">🚪 Sign Out</button>
+        </form>
+      </div>
+    </div>
 
   </aside>
 
