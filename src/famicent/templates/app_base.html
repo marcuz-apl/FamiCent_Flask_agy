@@ -54,6 +54,7 @@
   {# ── Header ──────────────────────────────────────────────── #}
   <header class="app-header" role="banner">
     <div class="header-left">
+      <button type="button" class="btn btn-ghost btn-sm header-sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
       <a href="{{ url_for('dashboard.docs') }}" class="btn btn-ghost btn-sm" id="header-docs-btn">📖 Docs</a>
       <button class="btn btn-ghost btn-sm" id="header-about-btn" data-modal-open="about-modal" aria-label="About FamiCent">ℹ️ About</button>
     </div>
@@ -115,27 +116,8 @@
 
 </div>
 
-{# ── Mobile Bottom Navigation ─────────────────────────────── #}
-<nav class="mobile-nav-bar" aria-label="Mobile navigation">
-  <a href="{{ url_for('dashboard.index') }}" class="mobile-nav-item {% if active_page == 'dashboard' %}active{% endif %}">
-    <span class="mobile-nav-icon">📊</span>
-    <span class="mobile-nav-label">Home</span>
-  </a>
-  <a href="{{ url_for('accounts.index') }}" class="mobile-nav-item {% if active_page == 'accounts' %}active{% endif %}">
-    <span class="mobile-nav-icon">🏦</span>
-    <span class="mobile-nav-label">Accounts</span>
-  </a>
-  <a href="{{ url_for('payments.index') }}" class="mobile-nav-item {% if active_page == 'payments' %}active{% endif %}">
-    <span class="mobile-nav-icon">💳</span>
-    <span class="mobile-nav-label">Payments</span>
-  </a>
-  {% if session.get('role') == 'admin' %}
-  <a href="{{ url_for('settings.index') }}" class="mobile-nav-item {% if active_page in ['settings', 'users', 'dbviewer'] %}active{% endif %}">
-    <span class="mobile-nav-icon">⚙️</span>
-    <span class="mobile-nav-label">Admin</span>
-  </a>
-  {% endif %}
-</nav>
+{# ── Sidebar Overlay ─────────────────────────────────────── #}
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
 
 {# ── About Modal ─────────────────────────────────────────── #}
 <div class="modal-overlay" id="about-modal" role="dialog"

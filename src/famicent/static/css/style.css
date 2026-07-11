@@ -1429,9 +1429,27 @@ tbody td {
   border-top: none !important;
 }
 
-/* Mobile Navigation Bar */
-.mobile-nav-bar {
+/* Mobile Sidebar Toggle & Overlay */
+.header-sidebar-toggle {
   display: none;
+  font-size: 1.2rem;
+  padding: var(--space-2);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 190;
+  transition: opacity var(--transition-normal) ease;
+  backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 /* =========================================================
@@ -1441,45 +1459,10 @@ tbody td {
   .app-shell {
     grid-template-columns: 1fr;
     grid-template-rows: var(--header-height) 1fr auto;
-    padding-bottom: 60px; /* Leave space for bottom nav */
   }
 
-  .mobile-nav-bar {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background: var(--clr-bg-secondary);
-    border-top: 1px solid var(--clr-border);
-    justify-content: space-around;
-    align-items: center;
-    z-index: 150;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .mobile-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--clr-text-secondary);
-    text-decoration: none;
-    font-size: 10px;
-    font-weight: 500;
-    flex: 1;
-    height: 100%;
-    gap: 4px;
-    transition: color var(--transition-fast);
-  }
-
-  .mobile-nav-item.active {
-    color: var(--clr-accent-primary);
-  }
-
-  .mobile-nav-icon {
-    font-size: 20px;
+  .header-sidebar-toggle {
+    display: inline-flex;
   }
 
   body {
@@ -1504,7 +1487,23 @@ tbody td {
   }
 
   .sidebar {
-    display: none !important;
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 280px !important;
+    height: 100vh !important;
+    transform: translateX(-100%) !important;
+    transition: transform var(--transition-normal) ease !important;
+    z-index: 200 !important;
+    box-shadow: var(--shadow-lg) !important;
+    background: var(--clr-bg-secondary) !important;
+    border-right: 1px solid var(--clr-border) !important;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
   }
 
   .form-row { grid-template-columns: 1fr; }

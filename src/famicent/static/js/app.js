@@ -895,15 +895,25 @@ const showFlash = (message, type = 'info') => {
 const initMobileNav = () => {
   const toggleBtn = document.getElementById('sidebar-toggle');
   const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
   if (!toggleBtn || !sidebar) return;
 
-  toggleBtn.addEventListener('click', () => {
+  const toggleSidebar = () => {
     sidebar.classList.toggle('mobile-open');
-  });
+    if (overlay) overlay.classList.toggle('active');
+  };
+
+  const closeSidebar = () => {
+    sidebar.classList.remove('mobile-open');
+    if (overlay) overlay.classList.remove('active');
+  };
+
+  toggleBtn.addEventListener('click', toggleSidebar);
+  if (overlay) overlay.addEventListener('click', closeSidebar);
 
   // Close on nav item click (mobile)
   document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => sidebar.classList.remove('mobile-open'));
+    item.addEventListener('click', closeSidebar);
   });
 };
 
