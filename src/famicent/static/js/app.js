@@ -995,6 +995,34 @@ const initDateAutoTab = () => {
 };
 
 // ============================================================
+// 11.7 Theme Switcher Manager
+// ============================================================
+
+const initTheme = () => {
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  if (!toggleBtn) return;
+
+  const getSavedTheme = () => localStorage.getItem('theme');
+  const saveTheme = (theme) => localStorage.setItem('theme', theme);
+
+  const applyTheme = (theme) => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+  };
+
+  // Event listener
+  toggleBtn.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.contains('light-theme');
+    const newTheme = isLight ? 'dark' : 'light';
+    applyTheme(newTheme);
+    saveTheme(newTheme);
+  });
+};
+
+// ============================================================
 // 12. Init on DOM Ready
 // ============================================================
 
@@ -1006,6 +1034,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPasswordBanner();
   initMobileNav();
   initDateAutoTab();
+  initTheme();
 
   // Page-specific init based on body data attribute
   const page = document.body.dataset.page;

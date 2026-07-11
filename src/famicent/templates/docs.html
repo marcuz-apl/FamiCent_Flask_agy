@@ -1,0 +1,97 @@
+{# Template: docs.html — Application user documentation and security guide. #}
+{% extends "app_base.html" %}
+
+{% block title %}Documentation{% endblock %}
+{% block page_name %}docs{% endblock %}
+{% block page_heading %}Documentation{% endblock %}
+
+{% set active_page = 'docs' %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; gap: var(--space-6);">
+
+  {# Welcome Section #}
+  <div class="card" id="docs-welcome-card">
+    <div class="card-header">
+      <div class="card-title">Welcome to FamiCent</div>
+    </div>
+    <p class="text-secondary mb-4">
+      FamiCent is a secure, local family finance tracker designed to help your household keep tabs on utility bills, credit card limits, subscriptions, and custom accounts in one central place. It runs entirely on your local machine, ensuring complete privacy with zero cloud dependencies.
+    </p>
+    <div class="alert alert-info">
+      <div class="alert-content">
+        <p class="alert-title">Important Rule</p>
+        <p class="alert-text">
+          Because FamiCent uses local database encryption keyed by your master password, losing your password means your data cannot be recovered. Keep your password safe!
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {# Features Grid #}
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6);" class="form-row">
+    
+    {# Account & Payment Guides #}
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Managing Accounts & Payments</div>
+      </div>
+      <ul style="display: flex; flex-direction: column; gap: var(--space-4); padding-left: 0;">
+        <li>
+          <span class="badge badge-utility" style="display: inline-block; margin-bottom: var(--space-1);">1. Create Accounts</span>
+          <p class="text-secondary" style="font-size: var(--font-size-sm);">
+            Navigate to the <strong>Accounts</strong> section and click <em>+ Add Account</em>. You can record balances, interest rates, and custom portal login details.
+          </p>
+        </li>
+        <li>
+          <span class="badge badge-credit-card" style="display: inline-block; margin-bottom: var(--space-1);">2. Track Payments</span>
+          <p class="text-secondary" style="font-size: var(--font-size-sm);">
+            Go to <strong>Payments</strong> to log card payments, transfers, or cash receipts against any account. This updates your monthly metrics automatically.
+          </p>
+        </li>
+      </ul>
+    </div>
+
+    {# Security & MFA Guides #}
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Security & MFA Guide</div>
+      </div>
+      <ul style="display: flex; flex-direction: column; gap: var(--space-4); padding-left: 0;">
+        <li>
+          <span class="badge badge-loan" style="display: inline-block; margin-bottom: var(--space-1);">TOTP Multi-Factor Authentication</span>
+          <p class="text-secondary" style="font-size: var(--font-size-sm);">
+            MFA is mandatory. During setup, scan the QR code using Google Authenticator, Authy, or any standard authenticator app to retrieve your 6-digit TOTP codes.
+          </p>
+        </li>
+        <li>
+          <span class="badge badge-subscription" style="display: inline-block; margin-bottom: var(--space-1);">Inactivity Auto-Lock</span>
+          <p class="text-secondary" style="font-size: var(--font-size-sm);">
+            FamiCent features a strict 5-minute inactivity session lock. You can customize this session duration limit under <strong>Settings</strong>.
+          </p>
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+
+  {# Database & Role Guidelines #}
+  <div class="card" id="docs-admin-card">
+    <div class="card-header">
+      <div class="card-title">Administrator Tools</div>
+    </div>
+    <p class="text-secondary mb-4">
+      If you are logged in as an <strong>Administrator</strong>, you have access to two specialized tools in the sidebar:
+    </p>
+    <ul style="display: flex; flex-direction: column; gap: var(--space-3); padding-left: 0;" class="mb-4">
+      <li>
+        <strong>👥 Users Management</strong>: Admins can add up to 5 family member profiles (Editors or Viewers), reset credentials, reset MFA enrollment, or adjust user-specific session lock timers.
+      </li>
+      <li>
+        <strong>🔎 DB Looker (Viewer)</strong>: Run custom, read-only SQL queries to directly inspect database structure and records (write commands are strictly blocked for security).
+      </li>
+    </ul>
+  </div>
+
+</div>
+{% endblock %}

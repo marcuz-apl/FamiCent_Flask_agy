@@ -133,6 +133,14 @@ def create_app(test_config: dict | None = None) -> Flask:
         )
         return response
 
+    # ------------------------------------------------------------------
+    # Context Processors
+    # ------------------------------------------------------------------
+    @app.context_processor
+    def inject_version() -> dict[str, str]:
+        from famicent import __version__
+        return {"version": __version__}
+
     return app
 
 

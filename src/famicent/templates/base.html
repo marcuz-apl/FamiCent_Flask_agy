@@ -7,6 +7,14 @@
   <meta name="csrf-token" content="{{ session.get('csrf_token', '') }}" />
   <meta name="session-timeout" content="{{ session.get('session_timeout', 300) }}" />
   <meta name="description" content="FamiCent — Secure family financial account management." />
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+        document.documentElement.classList.add('light-theme');
+      }
+    })();
+  </script>
   <title>{% block title %}FamiCent{% endblock %} — FamiCent</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   {% block extra_head %}{% endblock %}

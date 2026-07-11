@@ -6,12 +6,6 @@
 
   {# ── Sidebar ─────────────────────────────────────────────── #}
   <aside class="sidebar" id="sidebar" aria-label="Main navigation">
-    <div class="sidebar-brand">
-      <div class="sidebar-brand-icon" aria-hidden="true">💰</div>
-      <div>
-        <div class="sidebar-brand-name">Fami<span>Cent</span></div>
-      </div>
-    </div>
 
     <nav class="sidebar-nav" aria-label="Site navigation">
       <div class="sidebar-nav-label">Menu</div>
@@ -67,11 +61,19 @@
 
   {# ── Header ──────────────────────────────────────────────── #}
   <header class="app-header" role="banner">
-    <div class="d-flex align-center gap-3">
+    <div class="header-left">
       <button class="btn btn-ghost btn-sm" id="sidebar-toggle" aria-label="Toggle sidebar"
               style="display:none;" aria-expanded="false">☰</button>
-      <h1 class="header-title">{% block page_heading %}{% endblock %}</h1>
+      <a href="{{ url_for('dashboard.docs') }}" class="btn btn-ghost btn-sm" id="header-docs-btn">Docs</a>
+      <button class="btn btn-ghost btn-sm" id="header-about-btn" data-modal-open="about-modal" aria-label="About FamiCent">ℹ️ About</button>
     </div>
+    
+    <div class="header-brand" id="header-brand">
+      <div class="brand-icon" aria-hidden="true">💰</div>
+      <div class="brand-name">Fami<span>Cent</span></div>
+      <span class="brand-version" id="brand-version">v{{ version }}</span>
+    </div>
+    
     <div class="header-actions">
       <div class="header-user">
         <div class="header-avatar" aria-hidden="true">
@@ -79,13 +81,53 @@
         </div>
         <span>{{ session.get('username', '') }}</span>
       </div>
+      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle theme">
+        <span class="theme-icon-dark">🌙</span>
+        <span class="theme-icon-light">☀️</span>
+      </button>
     </div>
   </header>
 
   {# ── Main Content ────────────────────────────────────────── #}
   <main class="app-main" id="main-content" role="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">{% block page_heading %}{% endblock %}</h1>
+        <p class="page-subtitle">{% block page_subtitle %}Manage your family finances and obligations.{% endblock %}</p>
+      </div>
+    </div>
     {% block content %}{% endblock %}
   </main>
 
 </div>
+
+{# ── About Modal ─────────────────────────────────────────── #}
+<div class="modal-overlay" id="about-modal" role="dialog"
+     aria-modal="true" aria-labelledby="about-modal-title">
+  <div class="modal text-center about-dialog-modal">
+    <div class="modal-header about-dialog-header">
+      <div class="brand-icon about-dialog-icon" aria-hidden="true">💰</div>
+    </div>
+    <div class="mb-6">
+      <h2 class="modal-title" id="about-modal-title">FamiCent</h2>
+      <p class="text-muted mt-2">Version {{ version }}</p>
+    </div>
+    
+    <div class="alert alert-info text-left mb-6">
+      <div class="alert-content">
+        <p class="alert-title">Secure Family Finance Manager</p>
+        <p class="alert-text">FamiCent runs locally on your machine and stores all data in an encrypted database using bank-grade AES-256-GCM. Active sessions are automatically locked after 5 minutes of inactivity.</p>
+      </div>
+    </div>
+    
+    <p class="text-muted" style="font-size: var(--font-size-xs); line-height: 1.4;">
+      Developed with ❤️ by the FamiCent Team.<br />
+      &copy; 2026 FamiCent. All rights reserved.
+    </p>
+    <div class="modal-footer about-dialog-footer">
+      <button type="button" class="btn btn-primary" data-modal-close id="about-modal-close-btn">Close</button>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

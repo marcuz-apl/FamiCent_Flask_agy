@@ -68,3 +68,11 @@ def index():  # type: ignore[no-untyped-def]
         format_currency=format_currency,
         now=now,
     )
+
+
+@dashboard_bp.route("/docs")
+@login_required
+@mfa_required
+def docs():  # type: ignore[no-untyped-def]
+    """Render the application documentation and user guide."""
+    return render_template("docs.html")
