@@ -107,7 +107,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   const mfaForm = document.getElementById('mfa-form');
   if (mfaForm) {
-    mfaForm.addEventListener('submit', (e) => {
+    mfaForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
       const codeInput = document.getElementById('code');
       const errorContainer = document.getElementById('client-error-container');
       
@@ -125,12 +127,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (errorMsg) {
-        e.preventDefault();
         if (errorContainer) {
           errorContainer.innerHTML = `
             <div class="alert alert-error" role="alert">
               <div class="alert-content">
                 <p class="alert-text">${errorMsg}</p>
+              </div>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      try {
+        const formData = new FormData(mfaForm);
+        const response = await fetch(mfaForm.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+          return;
+        }
+
+        const data = await response.json();
+        if (!data.success) {
+          if (errorContainer) {
+            errorContainer.innerHTML = `
+              <div class="alert alert-error" role="alert">
+                <div class="alert-content">
+                  <p class="alert-text">${data.error || 'Verification failed.'}</p>
+                </div>
+              </div>
+            `;
+          }
+        }
+      } catch (err) {
+        if (errorContainer) {
+          errorContainer.innerHTML = `
+            <div class="alert alert-error" role="alert">
+              <div class="alert-content">
+                <p class="alert-text">An unexpected network error occurred.</p>
               </div>
             </div>
           `;

@@ -80,7 +80,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
       const usernameInput = document.getElementById('username');
       const passwordInput = document.getElementById('password');
       const errorContainer = document.getElementById('client-error-container');
@@ -99,12 +101,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (errorMsg) {
-        e.preventDefault();
         if (errorContainer) {
           errorContainer.innerHTML = `
             <div class="alert alert-error" role="alert">
               <div class="alert-content">
                 <p class="alert-text">${errorMsg}</p>
+              </div>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      try {
+        const formData = new FormData(loginForm);
+        const response = await fetch(loginForm.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+          return;
+        }
+
+        const data = await response.json();
+        if (!data.success) {
+          if (errorContainer) {
+            errorContainer.innerHTML = `
+              <div class="alert alert-error" role="alert">
+                <div class="alert-content">
+                  <p class="alert-text">${data.error || 'Login failed.'}</p>
+                </div>
+              </div>
+            `;
+          }
+        }
+      } catch (err) {
+        if (errorContainer) {
+          errorContainer.innerHTML = `
+            <div class="alert alert-error" role="alert">
+              <div class="alert-content">
+                <p class="alert-text">An unexpected network error occurred.</p>
               </div>
             </div>
           `;

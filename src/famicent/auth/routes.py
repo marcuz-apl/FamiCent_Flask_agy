@@ -190,6 +190,8 @@ def login():  # type: ignore[no-untyped-def]
                 )
 
         if stored_hash is None or not verify_password(stored_hash, password):
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.is_json:
+                return jsonify({"success": False, "error": "Invalid username or password."}), 400
             flash("Invalid username or password.", "error")
             return render_template("login.html", csrf_token=csrf_token)
 
@@ -249,6 +251,8 @@ def mfa_setup():  # type: ignore[no-untyped-def]
     secret = session.get("pending_mfa_secret", "")
 
     if not verify_code(secret, code):
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.is_json:
+            return jsonify({"success": False, "error": "Invalid code. Please try again."}), 400
         flash("Invalid code. Please try again.", "error")
         uri = get_provisioning_uri(secret, username)
         qr_data = generate_qr_base64(uri)
@@ -291,6 +295,8 @@ def mfa_verify():  # type: ignore[no-untyped-def]
 
         secret = user.mfa_secret_encrypted.decode("utf-8")
         if not verify_code(secret, code):
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.is_json:
+                return jsonify({"success": False, "error": "Invalid or expired code. Please try again."}), 400
             flash("Invalid or expired code. Please try again.", "error")
             return render_template("mfa.html", mode="verify", csrf_token=csrf_token)
 
