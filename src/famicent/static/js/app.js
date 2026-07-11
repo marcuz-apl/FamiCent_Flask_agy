@@ -1033,7 +1033,7 @@ const initTheme = () => {
 };
 
 // ============================================================
-// 11.8 Sidebar Auto-Hide (3 Minutes Idle)
+// 11.8 Sidebar Auto-Hide (60 Seconds Idle)
 // ============================================================
 
 const initSidebarAutoHide = () => {
@@ -1043,7 +1043,7 @@ const initSidebarAutoHide = () => {
   if (document.body.dataset.page === 'docs') return;
 
   let idleTime = 0;
-  const idleLimit = 180; // 3 minutes = 180 seconds
+  const idleLimit = 60; // 1 minute = 60 seconds
 
   const showSidebar = () => {
     shell.classList.remove('sidebar-hidden');

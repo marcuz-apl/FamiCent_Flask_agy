@@ -11,38 +11,38 @@
    ========================================================= */
 :root {
   /* Color Palette */
-  --clr-bg-primary:    hsl(224, 20%, 8%);
-  --clr-bg-secondary:  hsl(224, 18%, 12%);
-  --clr-bg-card:       hsl(224, 16%, 16%);
-  --clr-bg-elevated:   hsl(224, 14%, 20%);
+  --clr-bg-primary: hsl(224, 20%, 8%);
+  --clr-bg-secondary: hsl(224, 18%, 12%);
+  --clr-bg-card: hsl(224, 16%, 16%);
+  --clr-bg-elevated: hsl(224, 14%, 20%);
 
-  --clr-accent-primary:   hsl(213, 90%, 60%);
-  --clr-accent-hover:     hsl(213, 90%, 70%);
-  --clr-accent-glow:      hsla(213, 90%, 60%, 0.25);
+  --clr-accent-primary: hsl(213, 90%, 60%);
+  --clr-accent-hover: hsl(213, 90%, 70%);
+  --clr-accent-glow: hsla(213, 90%, 60%, 0.25);
 
-  --clr-success:  hsl(145, 63%, 49%);
-  --clr-warning:  hsl(38,  95%, 56%);
-  --clr-danger:   hsl(354, 86%, 60%);
-  --clr-info:     hsl(199, 89%, 55%);
+  --clr-success: hsl(145, 63%, 49%);
+  --clr-warning: hsl(38, 95%, 56%);
+  --clr-danger: hsl(354, 86%, 60%);
+  --clr-info: hsl(199, 89%, 55%);
 
-  --clr-text-primary:   hsl(220, 20%, 95%);
+  --clr-text-primary: hsl(220, 20%, 95%);
   --clr-text-secondary: hsl(220, 12%, 65%);
-  --clr-text-muted:     hsl(220,  8%, 45%);
+  --clr-text-muted: hsl(220, 8%, 45%);
 
-  --clr-border:       hsla(220, 20%, 100%, 0.08);
+  --clr-border: hsla(220, 20%, 100%, 0.08);
   --clr-border-focus: hsla(213, 90%, 60%, 0.6);
 
   /* Typography */
-  --font-sans:  'Inter', system-ui, sans-serif;
-  --font-mono:  'JetBrains Mono', 'Courier New', monospace;
-  --font-size-xs:   0.75rem;
-  --font-size-sm:   0.875rem;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
-  --font-size-lg:   1.125rem;
-  --font-size-xl:   1.25rem;
-  --font-size-2xl:  1.5rem;
-  --font-size-3xl:  1.875rem;
-  --font-size-4xl:  2.25rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -56,27 +56,28 @@
   --space-12: 3rem;
 
   /* Border Radius */
-  --radius-sm:  6px;
-  --radius-md:  10px;
-  --radius-lg:  16px;
-  --radius-xl:  24px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-pill: 9999px;
 
   /* Shadows */
-  --shadow-sm:   0 1px 3px hsla(0,0%,0%,0.3), 0 1px 2px hsla(0,0%,0%,0.2);
-  --shadow-md:   0 4px 16px hsla(0,0%,0%,0.4);
-  --shadow-lg:   0 8px 32px hsla(0,0%,0%,0.5);
+  --shadow-sm: 0 1px 3px hsla(0, 0%, 0%, 0.3), 0 1px 2px hsla(0, 0%, 0%, 0.2);
+  --shadow-md: 0 4px 16px hsla(0, 0%, 0%, 0.4);
+  --shadow-lg: 0 8px 32px hsla(0, 0%, 0%, 0.5);
   --shadow-glow: 0 0 24px var(--clr-accent-glow);
 
   /* Transitions */
-  --transition-fast:   150ms ease;
+  --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
-  --transition-slow:   400ms ease;
+  --transition-slow: 400ms ease;
   --theme-btn-hover-bg: hsla(220, 20%, 100%, 0.05);
 
   /* Layout */
   --sidebar-width: 240px;
   --header-height: 64px;
+  --footer-height: 56px;
   --content-max-width: 1200px;
 }
 
@@ -84,20 +85,20 @@
    1.5 Light Theme Variables
    ========================================================= */
 html.light-theme {
-  --clr-bg-primary:    hsl(220, 20%, 97%);
-  --clr-bg-secondary:  hsl(220, 20%, 92%);
-  --clr-bg-card:       hsl(0, 0%, 100%);
-  --clr-bg-elevated:   hsl(220, 20%, 88%);
+  --clr-bg-primary: hsl(220, 20%, 97%);
+  --clr-bg-secondary: hsl(220, 20%, 92%);
+  --clr-bg-card: hsl(0, 0%, 100%);
+  --clr-bg-elevated: hsl(220, 20%, 88%);
 
-  --clr-accent-primary:   hsl(213, 90%, 50%);
-  --clr-accent-hover:     hsl(213, 90%, 40%);
-  --clr-accent-glow:      hsla(213, 90%, 50%, 0.15);
+  --clr-accent-primary: hsl(213, 90%, 50%);
+  --clr-accent-hover: hsl(213, 90%, 40%);
+  --clr-accent-glow: hsla(213, 90%, 50%, 0.15);
 
-  --clr-text-primary:   hsl(224, 20%, 12%);
+  --clr-text-primary: hsl(224, 20%, 12%);
   --clr-text-secondary: hsl(224, 12%, 35%);
-  --clr-text-muted:     hsl(224, 8%, 55%);
+  --clr-text-muted: hsl(224, 8%, 55%);
 
-  --clr-border:       hsla(224, 20%, 0%, 0.08);
+  --clr-border: hsla(224, 20%, 0%, 0.08);
   --clr-border-focus: hsla(213, 90%, 50%, 0.6);
 
   --theme-btn-hover-bg: hsla(220, 20%, 0%, 0.05);
@@ -106,9 +107,18 @@ html.light-theme {
 /* =========================================================
    2. Reset & Base
    ========================================================= */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html { font-size: 16px; scroll-behavior: smooth; }
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: var(--font-sans);
@@ -120,12 +130,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--clr-accent-primary); text-decoration: none; transition: color var(--transition-fast); }
-a:hover { color: var(--clr-accent-hover); }
+a {
+  color: var(--clr-accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
 
-img { max-width: 100%; display: block; }
+a:hover {
+  color: var(--clr-accent-hover);
+}
 
-ul, ol { list-style: none; }
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul,
+ol {
+  list-style: none;
+}
 
 /* =========================================================
    3. Layout: App Shell
@@ -148,7 +171,7 @@ ul, ol { list-style: none; }
 
 /* Sidebar */
 .sidebar {
-  grid-row: 2;
+  grid-row: 2 / 3;
   grid-column: 1;
   background: var(--clr-bg-secondary);
   border-right: 1px solid var(--clr-border);
@@ -157,7 +180,9 @@ ul, ol { list-style: none; }
   padding: var(--space-6) 0;
   position: sticky;
   top: var(--header-height);
-  height: calc(100vh - var(--header-height) - 56px);
+  height: calc(100vh - var(--header-height) - var(--footer-height));
+  align-self: stretch;
+  /* fills its grid cell top-to-bottom */
   overflow-y: auto;
   z-index: 100;
   transition: transform var(--transition-slow) ease, opacity var(--transition-slow) ease;
@@ -284,7 +309,11 @@ details[open] .menu-arrow {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-.nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+.nav-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
 
 .sidebar-footer {
   padding: var(--space-4) var(--space-6);
@@ -537,7 +566,9 @@ html.light-theme .theme-icon-dark {
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.card:hover { border-color: hsla(220, 20%, 100%, 0.14); }
+.card:hover {
+  border-color: hsla(220, 20%, 100%, 0.14);
+}
 
 .card-header {
   display: flex;
@@ -646,8 +677,13 @@ html.light-theme .theme-icon-dark {
   transition: opacity var(--transition-fast);
 }
 
-.btn:hover::after { opacity: 0.06; }
-.btn:active::after { opacity: 0.12; }
+.btn:hover::after {
+  opacity: 0.06;
+}
+
+.btn:active::after {
+  opacity: 0.12;
+}
 
 .btn-primary {
   background: var(--clr-accent-primary);
@@ -655,7 +691,9 @@ html.light-theme .theme-icon-dark {
   box-shadow: 0 0 16px var(--clr-accent-glow);
 }
 
-.btn-primary:hover { box-shadow: 0 0 24px var(--clr-accent-glow); }
+.btn-primary:hover {
+  box-shadow: 0 0 24px var(--clr-accent-glow);
+}
 
 .btn-secondary {
   background: var(--clr-bg-elevated);
@@ -679,17 +717,32 @@ html.light-theme .theme-icon-dark {
   border-color: var(--clr-border);
 }
 
-.btn-ghost:hover { color: var(--clr-text-primary); }
+.btn-ghost:hover {
+  color: var(--clr-text-primary);
+}
 
-.btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--font-size-xs); }
-.btn-lg { padding: var(--space-3) var(--space-6); font-size: var(--font-size-base); }
+.btn-sm {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+}
 
-.btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+.btn-lg {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
 /* =========================================================
    6. Forms
    ========================================================= */
-.form-group { margin-bottom: var(--space-5); }
+.form-group {
+  margin-bottom: var(--space-5);
+}
 
 .form-label {
   display: block;
@@ -718,7 +771,9 @@ html.light-theme .theme-icon-dark {
   box-shadow: 0 0 0 3px hsla(213, 90%, 60%, 0.15);
 }
 
-.form-control::placeholder { color: var(--clr-text-muted); }
+.form-control::placeholder {
+  color: var(--clr-text-muted);
+}
 
 select.form-control {
   appearance: none;
@@ -777,9 +832,13 @@ tbody tr {
   transition: background var(--transition-fast);
 }
 
-tbody tr:last-child { border-bottom: none; }
+tbody tr:last-child {
+  border-bottom: none;
+}
 
-tbody tr:hover { background: hsla(220, 20%, 100%, 0.03); }
+tbody tr:hover {
+  background: hsla(220, 20%, 100%, 0.03);
+}
 
 tbody td {
   padding: var(--space-3) var(--space-4);
@@ -787,7 +846,9 @@ tbody td {
   vertical-align: middle;
 }
 
-.td-muted { color: var(--clr-text-muted); }
+.td-muted {
+  color: var(--clr-text-muted);
+}
 
 /* =========================================================
    8. Badges / Tags
@@ -803,12 +864,35 @@ tbody td {
   text-transform: capitalize;
 }
 
-.badge-utility    { background: hsla(199, 89%, 55%, 0.15); color: var(--clr-info); }
-.badge-credit-card{ background: hsla(240, 80%, 65%, 0.15); color: hsl(240, 80%, 75%); }
-.badge-loan       { background: hsla(354, 86%, 60%, 0.15); color: var(--clr-danger); }
-.badge-insurance  { background: hsla(145, 63%, 49%, 0.15); color: var(--clr-success); }
-.badge-subscription{ background: hsla(38, 95%, 56%, 0.15); color: var(--clr-warning); }
-.badge-custom     { background: hsla(220, 20%, 100%, 0.08); color: var(--clr-text-secondary); }
+.badge-utility {
+  background: hsla(199, 89%, 55%, 0.15);
+  color: var(--clr-info);
+}
+
+.badge-credit-card {
+  background: hsla(240, 80%, 65%, 0.15);
+  color: hsl(240, 80%, 75%);
+}
+
+.badge-loan {
+  background: hsla(354, 86%, 60%, 0.15);
+  color: var(--clr-danger);
+}
+
+.badge-insurance {
+  background: hsla(145, 63%, 49%, 0.15);
+  color: var(--clr-success);
+}
+
+.badge-subscription {
+  background: hsla(38, 95%, 56%, 0.15);
+  color: var(--clr-warning);
+}
+
+.badge-custom {
+  background: hsla(220, 20%, 100%, 0.08);
+  color: var(--clr-text-secondary);
+}
 
 /* =========================================================
    9. Alerts / Banners
@@ -848,12 +932,40 @@ tbody td {
   color: var(--clr-info);
 }
 
-.alert-content { flex: 1; }
-.alert-title { font-weight: 600; margin-bottom: var(--space-1); }
-.alert-text { font-size: var(--font-size-sm); opacity: 0.9; }
-.alert-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap; }
-.alert-dismiss { cursor: pointer; opacity: 0.7; transition: opacity var(--transition-fast); background: none; border: none; color: inherit; font-size: 1rem; }
-.alert-dismiss:hover { opacity: 1; }
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+
+.alert-text {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+}
+
+.alert-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.alert-dismiss {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1rem;
+}
+
+.alert-dismiss:hover {
+  opacity: 1;
+}
 
 /* Flash messages */
 .flash-container {
@@ -876,10 +988,25 @@ tbody td {
   animation: slideInRight var(--transition-normal) ease both;
 }
 
-.flash-error   { background: var(--clr-danger); color: white; }
-.flash-success { background: var(--clr-success); color: white; }
-.flash-warning { background: var(--clr-warning); color: hsl(38, 95%, 10%); }
-.flash-info    { background: var(--clr-info); color: white; }
+.flash-error {
+  background: var(--clr-danger);
+  color: white;
+}
+
+.flash-success {
+  background: var(--clr-success);
+  color: white;
+}
+
+.flash-warning {
+  background: var(--clr-warning);
+  color: hsl(38, 95%, 10%);
+}
+
+.flash-info {
+  background: var(--clr-info);
+  color: white;
+}
 
 /* =========================================================
    10. Modals
@@ -950,7 +1077,10 @@ tbody td {
   transition: all var(--transition-fast);
 }
 
-.modal-close:hover { background: var(--clr-border); color: var(--clr-text-primary); }
+.modal-close:hover {
+  background: var(--clr-border);
+  color: var(--clr-text-primary);
+}
 
 .modal-footer {
   display: flex;
@@ -1021,7 +1151,9 @@ tbody td {
   letter-spacing: -0.03em;
 }
 
-.login-logo-name span { color: var(--clr-accent-primary); }
+.login-logo-name span {
+  color: var(--clr-accent-primary);
+}
 
 .login-tagline {
   font-size: var(--font-size-sm);
@@ -1098,7 +1230,9 @@ tbody td {
   line-height: 1;
 }
 
-.password-toggle:hover { color: var(--clr-text-primary); }
+.password-toggle:hover {
+  color: var(--clr-text-primary);
+}
 
 /* =========================================================
    14. Upcoming Payments List
@@ -1120,7 +1254,9 @@ tbody td {
   transition: border-color var(--transition-fast);
 }
 
-.upcoming-item:hover { border-color: hsla(220, 20%, 100%, 0.14); }
+.upcoming-item:hover {
+  border-color: hsla(220, 20%, 100%, 0.14);
+}
 
 .upcoming-date {
   display: flex;
@@ -1143,9 +1279,22 @@ tbody td {
   letter-spacing: 0.05em;
 }
 
-.upcoming-info { flex: 1; min-width: 0; }
-.upcoming-name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.upcoming-provider { font-size: var(--font-size-xs); color: var(--clr-text-muted); }
+.upcoming-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.upcoming-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upcoming-provider {
+  font-size: var(--font-size-xs);
+  color: var(--clr-text-muted);
+}
 
 .upcoming-amount {
   font-family: var(--font-mono);
@@ -1156,8 +1305,13 @@ tbody td {
 }
 
 /* Due-soon indicator */
-.due-soon { border-left: 3px solid var(--clr-warning); }
-.due-overdue { border-left: 3px solid var(--clr-danger); }
+.due-soon {
+  border-left: 3px solid var(--clr-warning);
+}
+
+.due-overdue {
+  border-left: 3px solid var(--clr-danger);
+}
 
 /* =========================================================
    15. Account Cards Grid
@@ -1240,9 +1394,21 @@ tbody td {
   text-align: center;
 }
 
-.empty-state-icon { font-size: 3rem; opacity: 0.4; }
-.empty-state-title { font-size: var(--font-size-lg); font-weight: 600; }
-.empty-state-text { font-size: var(--font-size-sm); color: var(--clr-text-muted); max-width: 300px; }
+.empty-state-icon {
+  font-size: 3rem;
+  opacity: 0.4;
+}
+
+.empty-state-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.empty-state-text {
+  font-size: var(--font-size-sm);
+  color: var(--clr-text-muted);
+  max-width: 300px;
+}
 
 /* =========================================================
    17. Password Banner (Admin Onboarding)
@@ -1260,11 +1426,33 @@ tbody td {
   animation: slideDown var(--transition-slow) ease both;
 }
 
-.password-banner-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
-.password-banner-content { flex: 1; }
-.password-banner-title { font-weight: 600; color: var(--clr-warning); margin-bottom: var(--space-1); }
-.password-banner-text { font-size: var(--font-size-sm); color: var(--clr-text-secondary); }
-.password-banner-actions { display: flex; gap: var(--space-3); margin-top: var(--space-3); flex-wrap: wrap; }
+.password-banner-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.password-banner-content {
+  flex: 1;
+}
+
+.password-banner-title {
+  font-weight: 600;
+  color: var(--clr-warning);
+  margin-bottom: var(--space-1);
+}
+
+.password-banner-text {
+  font-size: var(--font-size-sm);
+  color: var(--clr-text-secondary);
+}
+
+.password-banner-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
 
 /* Generated password display */
 .generated-password-display {
@@ -1329,72 +1517,181 @@ tbody td {
 /* =========================================================
    20. Scrollbar Styling
    ========================================================= */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--clr-bg-secondary); }
-::-webkit-scrollbar-thumb { background: var(--clr-border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--clr-text-muted); }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--clr-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--clr-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-text-muted);
+}
 
 /* =========================================================
    21. Animations
    ========================================================= */
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 20px var(--clr-accent-glow); }
-  50%       { box-shadow: 0 0 40px var(--clr-accent-glow); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--clr-accent-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 40px var(--clr-accent-glow);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* =========================================================
    22. Utilities
    ========================================================= */
-.text-primary   { color: var(--clr-text-primary); }
-.text-secondary { color: var(--clr-text-secondary); }
-.text-muted     { color: var(--clr-text-muted); }
-.text-accent    { color: var(--clr-accent-primary); }
-.text-success   { color: var(--clr-success); }
-.text-warning   { color: var(--clr-warning); }
-.text-danger    { color: var(--clr-danger); }
+.text-primary {
+  color: var(--clr-text-primary);
+}
 
-.text-right  { text-align: right; }
-.text-center { text-align: center; }
+.text-secondary {
+  color: var(--clr-text-secondary);
+}
 
-.font-mono { font-family: var(--font-mono); }
-.font-bold { font-weight: 700; }
+.text-muted {
+  color: var(--clr-text-muted);
+}
 
-.d-flex        { display: flex; }
-.align-center  { align-items: center; }
-.justify-between { justify-content: space-between; }
-.gap-2 { gap: var(--space-2); }
-.gap-3 { gap: var(--space-3); }
-.gap-4 { gap: var(--space-4); }
+.text-accent {
+  color: var(--clr-accent-primary);
+}
 
-.mt-2 { margin-top: var(--space-2); }
-.mt-4 { margin-top: var(--space-4); }
-.mt-6 { margin-top: var(--space-6); }
-.mt-8 { margin-top: var(--space-8); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mb-6 { margin-bottom: var(--space-6); }
+.text-success {
+  color: var(--clr-success);
+}
 
-.w-full { width: 100%; }
+.text-warning {
+  color: var(--clr-warning);
+}
 
-.hidden { display: none !important; }
+.text-danger {
+  color: var(--clr-danger);
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-2 {
+  gap: var(--space-2);
+}
+
+.gap-3 {
+  gap: var(--space-3);
+}
+
+.gap-4 {
+  gap: var(--space-4);
+}
+
+.mt-2 {
+  margin-top: var(--space-2);
+}
+
+.mt-4 {
+  margin-top: var(--space-4);
+}
+
+.mt-6 {
+  margin-top: var(--space-6);
+}
+
+.mt-8 {
+  margin-top: var(--space-8);
+}
+
+.mb-4 {
+  margin-bottom: var(--space-4);
+}
+
+.mb-6 {
+  margin-bottom: var(--space-6);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
 
 .divider {
   border: none;
@@ -1412,7 +1709,7 @@ tbody td {
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-8);
-  height: 56px;
+  height: var(--footer-height);
   font-size: var(--font-size-sm);
   color: var(--clr-text-secondary);
 }
@@ -1808,11 +2105,17 @@ tbody td {
     transform: translateY(0) !important;
   }
 
-  .form-row { grid-template-columns: 1fr; }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 
-  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 
-  .accounts-grid { grid-template-columns: 1fr; }
+  .accounts-grid {
+    grid-template-columns: 1fr;
+  }
 
   .app-main {
     grid-column: 1;
@@ -1824,24 +2127,30 @@ tbody td {
   .brand-name {
     font-size: var(--font-size-base) !important;
   }
+
   .brand-version {
     font-size: 10px !important;
     padding: 0 4px !important;
   }
+
   .header-username {
     display: none;
   }
+
   .page-header {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3);
   }
+
   .modal {
     padding: var(--space-4) !important;
   }
+
   .modal-title {
     font-size: var(--font-size-lg) !important;
   }
+
   .about-dialog-modal .modal-title {
     font-size: var(--font-size-xl) !important;
   }
@@ -1851,6 +2160,7 @@ tbody td {
   .stat-grid {
     grid-template-columns: 1fr;
   }
+
   .app-header {
     padding: 0 var(--space-4);
   }
