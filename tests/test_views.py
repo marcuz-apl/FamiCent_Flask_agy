@@ -19,7 +19,8 @@ def test_docs_route_authenticated(auth_client):
 
 def test_version_context_processor(auth_client):
     """Verify that the application version is successfully injected into the context."""
+    from famicent import __version__
     response = auth_client.get("/docs")
     assert response.status_code == 200
-    # The template renders version in the header (v1.0.0) and about modal (Version 1.0.0)
-    assert b"v1.0.0" in response.data or b"Version 1.0.0" in response.data
+    expected_version = f"v{__version__}".encode("utf-8")
+    assert expected_version in response.data

@@ -57,16 +57,22 @@ def _rewrite_commit_message(msg_file: Path, version: str) -> None:
 
 def main() -> None:
     """Entry point invoked by the pre-commit hook."""
-    major, minor, patch = _read_version()
-    major, minor, patch = _bump(major, minor, patch)
-    _write_version(major, minor, patch)
+    should_bump = "--no-bump" not in sys.argv
 
-    version_str = f"{major}.{minor}.{patch}"
-    print(f"[bump_version] Version bumped to {version_str}")
+    if should_bump:
+        major, minor, patch = _read_version()
+        major, minor, patch = _bump(major, minor, patch)
+        _write_version(major, minor, patch)
+        version_str = f"{major}.{minor}.{patch}"
+        print(f"[bump_version] Version bumped to {version_str}")
+    else:
+        major, minor, patch = _read_version()
+        version_str = f"{major}.{minor}.{patch}"
 
     # If a commit message file path is passed (git hook passes COMMIT_EDITMSG)
-    if len(sys.argv) > 1:
-        msg_file = Path(sys.argv[1])
+    args = [arg for arg in sys.argv[1:] if arg != "--no-bump"]
+    if len(args) > 0:
+        msg_file = Path(args[0])
         if msg_file.exists():
             _rewrite_commit_message(msg_file, version_str)
 
