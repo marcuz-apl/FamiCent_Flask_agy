@@ -1451,6 +1451,13 @@ tbody td {
   color: var(--clr-accent-primary);
 }
 
+.footer-social-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 .contact-dialog-link {
   color: var(--clr-accent-primary);
   text-decoration: underline;
