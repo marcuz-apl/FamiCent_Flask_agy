@@ -1023,6 +1023,45 @@ const initTheme = () => {
 };
 
 // ============================================================
+// 11.8 Sidebar Auto-Hide (3 Minutes Idle)
+// ============================================================
+
+const initSidebarAutoHide = () => {
+  const shell = document.querySelector('.app-shell');
+  if (!shell) return;
+
+  let idleTime = 0;
+  const idleLimit = 180; // 3 minutes = 180 seconds
+
+  const showSidebar = () => {
+    shell.classList.remove('sidebar-hidden');
+  };
+
+  const hideSidebar = () => {
+    shell.classList.add('sidebar-hidden');
+  };
+
+  const resetIdleTimer = () => {
+    if (shell.classList.contains('sidebar-hidden')) {
+      showSidebar();
+    }
+    idleTime = 0;
+  };
+
+  const events = ['mousemove', 'keypress', 'click', 'scroll', 'touchstart'];
+  events.forEach(event => {
+    document.addEventListener(event, resetIdleTimer, { passive: true });
+  });
+
+  setInterval(() => {
+    idleTime++;
+    if (idleTime >= idleLimit) {
+      hideSidebar();
+    }
+  }, 1000);
+};
+
+// ============================================================
 // 12. Init on DOM Ready
 // ============================================================
 
@@ -1035,6 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initDateAutoTab();
   initTheme();
+  initSidebarAutoHide();
 
   // Page-specific init based on body data attribute
   const page = document.body.dataset.page;

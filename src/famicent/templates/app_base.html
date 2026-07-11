@@ -49,22 +49,12 @@
       {% endif %}
     </nav>
 
-    <div class="sidebar-footer">
-      <form action="{{ url_for('auth.logout') }}" method="post" id="logout-form">
-        <input type="hidden" name="csrf_token" value="{{ session.get('csrf_token', '') }}" />
-        <button type="submit" class="btn btn-ghost w-full" id="logout-btn" aria-label="Log out">
-          <span aria-hidden="true">🚪</span> Log Out
-        </button>
-      </form>
-    </div>
   </aside>
 
   {# ── Header ──────────────────────────────────────────────── #}
   <header class="app-header" role="banner">
     <div class="header-left">
-      <button class="btn btn-ghost btn-sm" id="sidebar-toggle" aria-label="Toggle sidebar"
-              style="display:none;" aria-expanded="false">☰</button>
-      <a href="{{ url_for('dashboard.docs') }}" class="btn btn-ghost btn-sm" id="header-docs-btn">Docs</a>
+      <a href="{{ url_for('dashboard.docs') }}" class="btn btn-ghost btn-sm" id="header-docs-btn">📖 Docs</a>
       <button class="btn btn-ghost btn-sm" id="header-about-btn" data-modal-open="about-modal" aria-label="About FamiCent">ℹ️ About</button>
     </div>
     
@@ -80,6 +70,12 @@
           {{ session.get('username', 'U')[0].upper() }}
         </div>
         <span>{{ session.get('username', '') }}</span>
+        <form action="{{ url_for('auth.logout') }}" method="post" id="logout-form" class="header-logout-form">
+          <input type="hidden" name="csrf_token" value="{{ session.get('csrf_token', '') }}" />
+          <button type="submit" class="btn btn-ghost btn-sm header-logout-btn" id="logout-btn" aria-label="Log out" title="Log Out">
+            🚪
+          </button>
+        </form>
       </div>
       <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle theme">
         <span class="theme-icon-dark">🌙</span>
@@ -98,6 +94,23 @@
     </div>
     {% block content %}{% endblock %}
   </main>
+
+  {# ── Footer ──────────────────────────────────────────────── #}
+  <footer class="app-footer" role="contentinfo">
+    <div class="footer-left">
+      <button class="btn btn-ghost btn-sm" id="footer-disclaimer-btn" data-modal-open="disclaimer-modal">Disclaimer</button>
+      <button class="btn btn-ghost btn-sm" id="footer-contact-btn" data-modal-open="contact-modal">Contact</button>
+    </div>
+    <div class="footer-center">
+      &copy; 2026, Alfazen Inc. All rights reserved.
+    </div>
+    <div class="footer-right">
+      <a href="tel:+15550199" class="footer-social-link" title="Call Us" aria-label="Telephone">📞</a>
+      <a href="https://alfazen.example.com" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="Website" aria-label="Web">🌐</a>
+      <a href="https://x.com/alfazen" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="Twitter/X" aria-label="Twitter/X">🐦</a>
+      <a href="https://linkedin.com/company/alfazen" target="_blank" rel="noopener noreferrer" class="footer-social-link" title="LinkedIn" aria-label="LinkedIn">💼</a>
+    </div>
+  </footer>
 
 </div>
 
@@ -126,6 +139,57 @@
     </p>
     <div class="modal-footer about-dialog-footer">
       <button type="button" class="btn btn-primary" data-modal-close id="about-modal-close-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+{# ── Disclaimer Modal ────────────────────────────────────── #}
+<div class="modal-overlay" id="disclaimer-modal" role="dialog"
+     aria-modal="true" aria-labelledby="disclaimer-modal-title">
+  <div class="modal about-dialog-modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="disclaimer-modal-title">Disclaimer</h2>
+    </div>
+    <div class="modal-body text-secondary mt-4 modal-body-custom">
+      <p class="mb-4">
+        FamiCent is a locally-hosted financial management utility provided "as is" and without any warranties, express or implied. It is designed to assist you in tracking your personal or family finances.
+      </p>
+      <p class="mb-4">
+        Alfazen Inc. does not store, access, or transmit your financial records or credentials. All data is saved on your local storage device using local encryption schemas.
+      </p>
+      <p>
+        By using this software, you agree that you are solely responsible for keeping backups of your master password, TOTP keys, and database. Alfazen Inc. cannot recover data in the event of lost credentials.
+      </p>
+    </div>
+    <div class="modal-footer modal-footer-no-border">
+      <button type="button" class="btn btn-primary" data-modal-close id="disclaimer-modal-close-btn">I Understand</button>
+    </div>
+  </div>
+</div>
+
+{# ── Contact Modal ───────────────────────────────────────── #}
+<div class="modal-overlay" id="contact-modal" role="dialog"
+     aria-modal="true" aria-labelledby="contact-modal-title">
+  <div class="modal about-dialog-modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="contact-modal-title">Contact Support</h2>
+    </div>
+    <div class="modal-body text-secondary mt-4 modal-body-custom">
+      <p class="mb-4">
+        Need assistance, want to report a security bug, or have feature feedback? We would love to hear from you.
+      </p>
+      <div class="alert alert-info mb-4">
+        <div class="alert-content">
+          <p class="alert-title">Support Hours</p>
+          <p class="alert-text">Monday - Friday, 9:00 AM - 5:00 PM EST</p>
+        </div>
+      </div>
+      <p class="mb-2"><strong>📞 Phone:</strong> +1 (555) 0199</p>
+      <p class="mb-2"><strong>📧 Email:</strong> support@alfazen.example.com</p>
+      <p><strong>🌐 Web:</strong> <a href="https://alfazen.example.com" target="_blank" rel="noopener noreferrer" class="contact-dialog-link">alfazen.example.com</a></p>
+    </div>
+    <div class="modal-footer modal-footer-no-border">
+      <button type="button" class="btn btn-primary" data-modal-close id="contact-modal-close-btn">Close</button>
     </div>
   </div>
 </div>
